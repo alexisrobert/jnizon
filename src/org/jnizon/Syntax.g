@@ -1,12 +1,14 @@
 grammar Syntax;
 
+@header { package org.jnizon; }
+
 start	:	prog+;
 
 prog	:	NEWLINE
 	|	stmt NEWLINE
 	|	stmt ';';
 
-stmt	:	ID '=' expr {System.out.println("Assignation : " + $ID.text + " = " + $INT.text);};
+stmt	:	ID '=' expr {System.out.println("Assignation : " + $ID.text + " = " + $expr.text);};
 
 expr	:	INT {System.out.println("Integer pull : "+$INT.text); }
 	|	ID {System.out.println("Variable pull : "+$ID.text); };
