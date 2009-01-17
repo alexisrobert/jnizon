@@ -11,6 +11,12 @@ public class Context extends HashMap<Integer, HeapItem> {
 		this.context_id = id;
 	}
 	
+	public Expression get(Identifier id) {
+		HeapItem item = get(id.getName());
+		if(item == null) return id;
+		return item.getValue();
+	}
+	
 	public HeapItem get(String key) {
 		return get(key.hashCode());
 	}
@@ -25,6 +31,11 @@ public class Context extends HashMap<Integer, HeapItem> {
 	
 	public void put(HeapItem value) {
 		put(value.getLabel(), value); // TODO: Change hashCode to MD4
+	}
+	
+	public void put(Identifier id, Expression expr) {
+		HeapItem item = new HeapItem(id.getName(), expr);
+		put(item);
 	}
 	
 	public int getContextId() {

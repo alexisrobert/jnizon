@@ -2,10 +2,10 @@ package org.jnizon;
 
 public class HeapItem {
 	private String label;
-	private Object value;
+	private Expression value;
 	
 	public HeapItem(String label) { this(label, null); }
-	public HeapItem(String label, Object value) {
+	public HeapItem(String label, Expression value) {
 		this.label = label;
 		this.value = value;
 	}
@@ -22,7 +22,7 @@ public class HeapItem {
 		return label;
 	}
 	
-	public Object getValue() {
+	public Expression getValue() {
 		return value;
 	}
 }
