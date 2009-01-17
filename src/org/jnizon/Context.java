@@ -1,0 +1,33 @@
+package org.jnizon;
+
+import java.util.HashMap;
+
+public class Context extends HashMap<Integer, HeapItem> {
+	private static final long serialVersionUID = 4161192730488414955L;
+	
+	private int context_id = 0;
+	
+	public Context(int id) {
+		this.context_id = id;
+	}
+	
+	public HeapItem get(String key) {
+		return get(key.hashCode());
+	}
+	
+	public void put(int key, HeapItem value) {
+		put(Integer.valueOf(key), value);
+	}
+	
+	public void put(String key, HeapItem value) {
+		put(key.hashCode(), value);
+	}
+	
+	public void put(HeapItem value) {
+		put(value.getLabel(), value); // TODO: Change hashCode to MD4
+	}
+	
+	public int getContextId() {
+		return context_id;
+	}
+}
