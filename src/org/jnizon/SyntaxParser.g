@@ -3,26 +3,30 @@ parser grammar SyntaxParser;
 options {
 output = AST;
 tokenVocab = SyntaxLexer;
+backtrack=true;
 }
 
 tokens {
-	START;
+	ROOT;
 	STATEMENT;
-	ASSIGN;
-	INT_EXPR;
-	ID_EXPR;
+	ASSIGNEMENT;
+	FUNCTIONCALL;
 }
 
 @header { package org.jnizon; }
 
-start	:	prog+ -> ^(START prog*);
+start	:	prog+ -> ^(ROOT prog*);
 
 prog	:	NEWLINE!
-	//|	stmt NEWLINE -> ^(STATEMENT stmt)
-	|	stmt ENDINSTRUCT -> ^(STATEMENT stmt);
+	|	stmt NEWLINE!
+	|	stmt ENDINSTRUCT!;
 
-stmt	:	ID MISCSEP? ASSIGN MISCSEP? expr {System.out.println("Assignation : " + $ID.text + " = " + $expr.text);} -> ^(ASSIGN ID expr);
+stmt	:	ID MISCSEP? ASSIGN MISCSEP? expr -> ^(ASSIGNEMENT ID expr)
 	|	expr;
+	
+csexpr	:	expr ( COMMA! expr )*;
 
-expr	:	value=INT {System.out.println("Integer pull : "+$INT.text); } -> ^(INT_EXPR $value)
-	|	value=ID {System.out.println("Variable pull : "+$ID.text); } -> ^(ID_EXPR $value);
+expr	:	INT
+	|	ID
+	|	ID OPENBRK csexpr? CLOSEBRK -> ^(FUNCTIONCALL ID csexpr?);
+
