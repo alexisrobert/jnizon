@@ -2,10 +2,14 @@ package org.jnizon;
 
 import java.io.IOException;
 
+import org.antlr.runtime.RecognitionException;
+
 import jline.ConsoleReader;
 
 public class Shell {
-	public Shell() {
+	private Interpreter interpreter;
+	public Shell(Interpreter interpreter) {
+		this.interpreter = interpreter;
 	}
 	
 	public void start() {
@@ -22,8 +26,13 @@ public class Shell {
 			reader.setUseHistory(true);
 			
 			while ((line = reader.readLine(String.format("In[%d]:= ",iteration))) != null) {
-				System.out.print(String.format("Out[%d]:= ",iteration));
-				System.out.println(String.format("Will analyse %s !", line));
+				System.out.print(String.format("Out[%d]= ",iteration));
+				
+				try {
+					interpreter.evaluate(line);
+				} catch (RecognitionException e) {
+					e.printStackTrace();
+				}
 				
 				System.out.println();
 				iteration++;
