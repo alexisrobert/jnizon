@@ -34,16 +34,57 @@ public class Interpreter {
 		
 		SyntaxTree tree = (SyntaxTree) result.getTree();
 		printTree(tree, 0);
+		
+		Heap heap = new Heap();
+		Context ctx = heap.getContext(0);
+		CodeBlock main = (CodeBlock)convertTree(tree);
+		Expression expr = main.evaluate(ctx);
+		System.out.println("Result : " + expr);
+	
+	
+	public static Expression convertTree(CommonTree tree) {
+		if(tree.getType() == SyntaxParser.ROOT) {
+			CodeBlock block = new CodeBlock();
+			if (tree.getChildren() != null) {
+				for (Object child : tree.getChildren()) {
+					block.getStatements().add(convertTree((CommonTree)child));
+				}
+			}
+			return block;
+		} else if(tree.getType() == SyntaxParser.ASSIGNEMENT) {
+			Identifier lval = id((CommonTree)tree.getChild(0));
+			Expression rVal = convertTree((CommonTree)tree.getChild(1));
+			return new Assignment((Identifier)lval, rVal);
+		} else if(tree.getType() == SyntaxParser.INT) {
+			return new IntConstant(Integer.parseInt(tree.getText()));
+		}else if(tree.getType() == SyntaxParser.ID) {
+			return id(tree);
+		} else if(tree.getType() == SyntaxParser.FUNCTIONCALL) {
+			Identifier funcid = id((CommonTree)tree.getChild(0));
+			List<Expression> arguments = new ArrayList<Expression>();
+			for(int i = 1; i < tree.getChildCount(); i++) {
+				arguments.add(convertTree((CommonTree)tree.getChild(i)));
+			}
+			Expression func = ctx.get(funcid);
+			if(func instanceof Function)
+				return new FunctionCall((Function)func, arguments);
+			else throw new RuntimeException("Id : " + funcid + " is not a function.");
+		}
+		return null;
 	}
 	
-	private void printTree(CommonTree tree, int indent) {
+	public static Identifier id(CommonTree tree) {
+		return new Identifier(tree.getText());
+	}
+
+	public static void printTree(CommonTree tree, int indent) {
 		for (int i = 0; i < indent; i++)
 			System.out.print(" - ");
 		if (tree == null) {
 			System.out.println("Null");
 			return;
 		}
-		System.out.println(tree.getText());
+		System.out.println(tree.getText() + " : " + tree.getToken().getType());
 		if (tree.getChildren() != null) {
 			for (Object child : tree.getChildren()) {
 				printTree((CommonTree) child, indent + 1);
