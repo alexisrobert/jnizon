@@ -10,6 +10,8 @@ import org.antlr.runtime.tree.CommonTreeAdaptor;
 
 public class Interpreter {
 	private CommonTreeAdaptor adaptor;
+	private static Heap heap;
+	private static Context global_context;
 	
 	public Interpreter() {
 		adaptor = new CommonTreeAdaptor() {
@@ -18,9 +20,12 @@ public class Interpreter {
 				return new SyntaxTree(token);
 			}
 		};
+		
+		heap = new Heap();
+		global_context = heap.getContext(0);
 	}
 	
-	public void evaluate(String code) throws RecognitionException {
+	public Expression evaluate(String code) throws RecognitionException {
 		ANTLRStringStream str = new ANTLRStringStream(code);
 		SyntaxLexer lexer = new SyntaxLexer(str);
 		TokenStream tkstr = new CommonTokenStream(lexer);
@@ -35,13 +40,9 @@ public class Interpreter {
 		SyntaxTree tree = (SyntaxTree) result.getTree();
 		printTree(tree, 0);
 		
-		Heap heap = new Heap();
-		Context ctx = heap.getContext(0);
 		CodeBlock main = (CodeBlock)convertTree(tree);
-		Expression expr = main.evaluate(ctx);
-		System.out.println("Result : " + expr);
+		return main.evaluate(global_context);
 	}
-	
 	
 	public static Expression convertTree(CommonTree tree) {
 		if(tree.getType() == SyntaxParser.ROOT) {
@@ -66,7 +67,7 @@ public class Interpreter {
 			for(int i = 1; i < tree.getChildCount(); i++) {
 				arguments.add(convertTree((CommonTree)tree.getChild(i)));
 			}
-			Expression func = ctx.get(funcid);
+			Expression func = global_context.get(funcid);
 			if(func instanceof Function)
 				return new FunctionCall((Function)func, arguments);
 			else throw new RuntimeException("Id : " + funcid + " is not a function.");
