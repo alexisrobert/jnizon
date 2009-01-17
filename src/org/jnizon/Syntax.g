@@ -1,13 +1,16 @@
 grammar Syntax;
 
-prog	:	stmt+;
+start	:	prog+;
 
-stmt	:	NEWLINE
-	|	expr NEWLINE
-	|	expr ';';
+prog	:	NEWLINE
+	|	stmt NEWLINE
+	|	stmt ';';
 
-expr	:	CHARS '=' INT {System.out.println("haiiii");};
+stmt	:	ID '=' expr {System.out.println("Assignation : " + $ID + " = " + $INT);};
+
+expr	:	INT {System.out.println("Integer pull : "+$INT); }
+	|	ID {System.out.println("Variable pull : "+$ID); };
 
 NEWLINE	:	'\r'?'\n';
-CHARS	:	('a'..'z'|'A'..'Z')+;
+ID	:	('a'..'z'|'A'..'Z') (('a'..'z'|'A'..'Z'|'0'..'9')+) ;
 INT	:	'0'..'9'+;
