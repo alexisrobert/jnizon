@@ -15,7 +15,7 @@ public class JNizon {
 	 * @throws RecognitionException
 	 */
 	public static void main(String[] args) throws RecognitionException {
-		ANTLRStringStream str = new ANTLRStringStream("tz = 3;ty = 2;ko = ty+tz;");
+		ANTLRStringStream str = new ANTLRStringStream("tz = Test[1,2,3];Show[tz];");
 		SyntaxLexer lexer = new SyntaxLexer(str);
 		TokenStream tkstr = new CommonTokenStream(lexer);
 		SyntaxParser parser = new SyntaxParser(tkstr);
