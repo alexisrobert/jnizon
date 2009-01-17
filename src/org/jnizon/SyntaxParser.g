@@ -19,7 +19,9 @@ prog	:	NEWLINE!
 	|	stmt NEWLINE!
 	|	stmt ENDINSTRUCT!;
 
-stmt	:	ID MISCSEP? ASSIGN MISCSEP? expr -> ^(ASSIGNEMENT ID expr);
+stmt	:	ID MISCSEP? ASSIGN MISCSEP? expr -> ^(ASSIGNEMENT ID expr)
+	|	expr;
+	
 
 expr	:	INT
 	|	ID;
