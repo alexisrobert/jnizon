@@ -40,6 +40,7 @@ public class Interpreter {
 		CodeBlock main = (CodeBlock)convertTree(tree);
 		Expression expr = main.evaluate(ctx);
 		System.out.println("Result : " + expr);
+	}
 	
 	
 	public static Expression convertTree(CommonTree tree) {
