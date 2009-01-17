@@ -19,7 +19,8 @@ start	:	prog+ -> ^(ROOT prog*);
 
 prog	:	NEWLINE!
 	|	stmt NEWLINE!
-	|	stmt ENDINSTRUCT!;
+	|	stmt ENDINSTRUCT!
+	|	stmt EOF!;
 
 stmt	:	ID MISCSEP? ASSIGN MISCSEP? expr -> ^(ASSIGNEMENT ID expr)
 	|	expr;
