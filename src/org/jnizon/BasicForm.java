@@ -1,16 +1,17 @@
 package org.jnizon;
 
 import java.util.Iterator;
+import java.util.List;
 
 public class BasicForm extends JavaFunction {
 
 	public BasicForm() {
-		super("BasicForm", "expr");
+		super("BasicForm");
 	}
 
 	@Override
-	public Expression execute(Context ctx, Expression[] arguments) {
-		Expression expr = arguments[0];
+	public Expression execute(Context ctx, List<Expression> arguments) {
+		Expression expr = arguments.get(0);
 		printForm(ctx, expr);
 		return expr;
 	}
@@ -24,16 +25,16 @@ public class BasicForm extends JavaFunction {
 			}
 		} else if(expr instanceof FunctionCall) {
 			FunctionCall fc = (FunctionCall)expr;
-			if(fc.getFunction().getFuncId().getName().equals("Plus")) {
+			if(fc.getFunctionId().getName().equals("Plus")) {
 				printForm(ctx, fc.getArguments().get(0));
 				System.out.print(" + ");
 				printForm(ctx, fc.getArguments().get(1));
-			} else if(fc.getFunction().getFuncId().getName().equals("Times")) {
+			} else if(fc.getFunctionId().getName().equals("Times")) {
 				printForm(ctx, fc.getArguments().get(0));
 				System.out.print("*");
 				printForm(ctx, fc.getArguments().get(1));
 			} else {
-				System.out.print(fc.getFunction().getFuncId().getName() + "[");
+				System.out.print(fc.getFunctionId().getName() + "[");
 				Iterator<Expression> it = fc.getArguments().iterator();
 				while(it.hasNext()) {
 					printForm(ctx, it.next()/*.evaluate(ctx)*/);
@@ -47,6 +48,15 @@ public class BasicForm extends JavaFunction {
 		} else if(expr instanceof Identifier) {
 			Identifier id = (Identifier)expr;
 			System.out.print(id.evaluate(ctx));
+		} else if(expr instanceof ListExpression) {
+			ListExpression le = (ListExpression)expr;
+			Iterator<Expression> it = le.getElements().iterator();
+			System.out.print("{");
+			while(it.hasNext()) {
+				printForm(ctx, it.next()/*.evaluate(ctx)*/);
+				if(it.hasNext()) System.out.print(", ");
+			}
+			System.out.print("}");
 		} else if(expr instanceof NullExpression) {
 			
 		} else {

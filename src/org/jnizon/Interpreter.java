@@ -35,7 +35,7 @@ public class Interpreter {
 		global_context = heap.getContext(0);
 		define(defaultForm);
 	}
-	
+
 	public void addMapping(int token, Identifier function) {
 		mappings.put(token, function);
 	}
@@ -46,7 +46,7 @@ public class Interpreter {
 
 	public Expression evaluate(String code) throws RecognitionException {
 		Expression main = parse(code);
-		return new FunctionCall(defaultForm, Collections.singletonList(main
+		return new FunctionCall(defaultForm.getFuncId(), Collections.singletonList(main
 				.evaluate(global_context))).evaluate(global_context);
 	}
 
@@ -61,16 +61,24 @@ public class Interpreter {
 		SyntaxParser.start_return result = parser.start();
 
 		SyntaxTree tree = (SyntaxTree) result.getTree();
-		//printTree(tree, 0);// print raw AST
+		// printTree(tree, 0);// print raw AST
 
 		return convertTree(tree);
 	}
 
 	public Expression convertTree(CommonTree tree) {
-		if(tree == null) return new NullExpression();
+		if (tree == null)
+			return new NullExpression();
 		if (tree.getType() == SyntaxParser.CODEBLOCK) {
 			if (tree.getChildren() != null) {
-				if(tree.getChildCount() == 1) return convertTree((CommonTree)tree.getChild(0));//Simplify a bit the tree, no 1 element codeblock
+				if (tree.getChildCount() == 1)
+					return convertTree((CommonTree) tree.getChild(0));// Simplify
+																		// a bit
+																		// the
+																		// tree,
+																		// no 1
+																		// element
+																		// codeblock
 				CodeBlock block = new CodeBlock();
 				for (Object child : tree.getChildren()) {
 					block.getStatements().add(convertTree((CommonTree) child));
@@ -87,7 +95,8 @@ public class Interpreter {
 			return new Clear((Identifier) lval);
 		} else if (tree.getType() == SyntaxParser.INT) {
 			return new IntConstant(Integer.parseInt(tree.getText()));
-		} else if (tree.getType() == SyntaxParser.ID && tree.getChildCount() == 0) {
+		} else if (tree.getType() == SyntaxParser.ID
+				&& tree.getChildCount() == 0) {
 			return id(tree);
 		} else if (tree.getType() == SyntaxParser.FUNCTIONDEF) {
 			Identifier funcid = id((CommonTree) tree.getChild(0));
@@ -100,17 +109,13 @@ public class Interpreter {
 		} else {
 			Identifier funcid;
 			funcid = mappings.get(tree.getType());
-			if(funcid == null) funcid = id(tree);
+			if (funcid == null)
+				funcid = id(tree);
 			List<Expression> arguments = new ArrayList<Expression>();
 			for (int i = 0; i < tree.getChildCount(); i++) {
 				arguments.add(convertTree((CommonTree) tree.getChild(i)));
 			}
-			Expression func = global_context.get(funcid);
-			if (func instanceof Function)
-				return new FunctionCall((Function) func, arguments);
-			else
-				throw new RuntimeException("Id : " + funcid
-						+ " is not a function.");
+			return new FunctionCall(funcid, arguments);
 		}
 	}
 

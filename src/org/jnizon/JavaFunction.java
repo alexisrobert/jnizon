@@ -1,20 +1,18 @@
 package org.jnizon;
 
+import java.util.List;
+
 public abstract class JavaFunction extends Function {
 	
-	public JavaFunction(String funcName, String ... args) {
-		super(new Identifier(funcName), args);
+	public JavaFunction(String funcName) {
+		super(new Identifier(funcName));
 	}
 	
 	@Override
 	public Expression evaluate(Context ctx) {
-		Expression[] args = new Expression[getArguments().length];
-		for(int i = 0; i < getArguments().length; i++) {
-			args[i] = ctx.get(getArguments()[i]);
-		}
-		return execute(ctx, args);
+		return this;
 	}
 	
-	public abstract Expression execute(Context ctx, Expression[] arguments);
+	public abstract Expression execute(Context ctx, List<Expression> arguments);
 
 }

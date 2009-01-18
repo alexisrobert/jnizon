@@ -1,6 +1,7 @@
 package org.jnizon;
 
 import org.antlr.runtime.RecognitionException;
+import java.util.List;
 
 public class JNizon {
 
@@ -12,26 +13,32 @@ public class JNizon {
 	public static void main(String[] args) throws RecognitionException {
 		// Builtins :)
 		BasicForm defaultForm = new BasicForm();
-		JavaFunction plus = new JavaFunction("Plus", "a", "b") {
+		JavaFunction plus = new JavaFunction("Plus") {
 			@Override
-			public Expression execute(Context ctx, Expression[] arguments) {
-				if(arguments[0] instanceof IntConstant && arguments[1] instanceof IntConstant) {
-					int a = ((IntConstant)arguments[0]).getValue();
-					int b = ((IntConstant)arguments[1]).getValue();
+			public Expression execute(Context ctx, List<Expression> arguments) {
+				if(arguments.get(0) instanceof IntConstant && arguments.get(1) instanceof IntConstant) {
+					int a = ((IntConstant)arguments.get(0)).getValue();
+					int b = ((IntConstant)arguments.get(1)).getValue();
 					return new IntConstant(a+b);
 				}
 				return this;
 			}
 		};
-		JavaFunction times = new JavaFunction("Times", "a", "b") {
+		JavaFunction times = new JavaFunction("Times") {
 			@Override
-			public Expression execute(Context ctx, Expression[] arguments) {
-				if(arguments[0] instanceof IntConstant && arguments[1] instanceof IntConstant) {
-					int a = ((IntConstant)arguments[0]).getValue();
-					int b = ((IntConstant)arguments[1]).getValue();
+			public Expression execute(Context ctx, List<Expression> arguments) {
+				if(arguments.get(0) instanceof IntConstant && arguments.get(1) instanceof IntConstant) {
+					int a = ((IntConstant)arguments.get(0)).getValue();
+					int b = ((IntConstant)arguments.get(1)).getValue();
 					return new IntConstant(a*b);
 				}
 				return this;
+			}
+		};
+		Function list = new JavaFunction("List") {
+			@Override
+			public Expression execute(Context ctx, List<Expression> arguments) {
+				return new ListExpression(arguments);
 			}
 		};
 		// end of builtins
@@ -43,6 +50,9 @@ public class JNizon {
 		
 		it.define(times);
 		it.addMapping(SyntaxParser.TIMES, times.getFuncId());
+		
+		it.define(list);
+		it.addMapping(SyntaxParser.LISTFUNC, list.getFuncId());
 		
 		Shell sh = new Shell(it);
 		sh.start();

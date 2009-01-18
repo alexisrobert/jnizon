@@ -20,3 +20,7 @@ TIMES : '*';
 MINUS : '-';
 LPAREN : '(';
 RPAREN : ')';
+DBLOPENBRK : '[[';
+DBLCLOSEBRK : ']]';
+OPENLST : '{';
+CLOSELST : '}';
