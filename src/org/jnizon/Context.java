@@ -11,6 +11,10 @@ public class Context extends HashMap<Integer, HeapItem> {
 		this.context_id = id;
 	}
 	
+	public boolean containsKey(Identifier id) {
+		return containsKey(Integer.valueOf(id.getName().hashCode()));
+	}
+	
 	public Expression get(Identifier id) {
 		HeapItem item = get(id.getName());
 		if(item == null) return id;
@@ -36,6 +40,10 @@ public class Context extends HashMap<Integer, HeapItem> {
 	public void put(Identifier id, Expression expr) {
 		HeapItem item = new HeapItem(id.getName(), expr);
 		put(item);
+	}
+	
+	public void remove(Identifier id) {
+		remove(Integer.valueOf(id.getName().hashCode()));
 	}
 	
 	public int getContextId() {

@@ -16,5 +16,4 @@ public class Assignment implements Expression {
 		ctx.put(variable, result);
 		return result;
 	}
-
 }

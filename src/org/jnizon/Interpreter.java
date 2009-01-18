@@ -1,5 +1,8 @@
 package org.jnizon;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -57,6 +60,9 @@ public class Interpreter {
 			Identifier lval = id((CommonTree)tree.getChild(0));
 			Expression rVal = convertTree((CommonTree)tree.getChild(1));
 			return new Assignment((Identifier)lval, rVal);
+		} else if(tree.getType() == SyntaxParser.CLEAR) {
+			Identifier lval = id((CommonTree)tree.getChild(0));
+			return new Clear((Identifier)lval);
 		} else if(tree.getType() == SyntaxParser.INT) {
 			return new IntConstant(Integer.parseInt(tree.getText()));
 		}else if(tree.getType() == SyntaxParser.ID) {
