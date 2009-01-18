@@ -12,6 +12,7 @@ public class Assignment implements Expression {
 	
 	@Override
 	public Expression evaluate(Context ctx) {
+		ctx.put(variable, value);
 		Expression result = value.evaluate(ctx);
 		ctx.put(variable, result);
 		return result;
