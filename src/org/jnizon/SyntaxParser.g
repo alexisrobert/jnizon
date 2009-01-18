@@ -40,6 +40,8 @@ multExpr
     ; 
 
 atom	:	INT
+	|	TRUE
+	|	FALSE
 	|	ID
 	|	ID OPENBRK csexpr? CLOSEBRK -> ^(ID csexpr?)
 	|   LPAREN! expr RPAREN!;

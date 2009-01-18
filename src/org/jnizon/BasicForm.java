@@ -44,10 +44,12 @@ public class BasicForm extends JavaFunction {
 			}
 		} else if(expr instanceof IntConstant) {
 			IntConstant i = (IntConstant)expr;
-			System.out.print(i.getValue());
+			System.out.print(i.toString());
 		} else if(expr instanceof Identifier) {
 			Identifier id = (Identifier)expr;
 			System.out.print(id.evaluate(ctx));
+		} else if(expr instanceof BooleanConstant) {
+			System.out.print(((BooleanConstant)expr).toString());
 		} else if(expr instanceof ListExpression) {
 			ListExpression le = (ListExpression)expr;
 			Iterator<Expression> it = le.getElements().iterator();
