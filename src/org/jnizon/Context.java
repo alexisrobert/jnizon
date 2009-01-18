@@ -51,7 +51,7 @@ public class Context extends HashMap<Integer, HeapItem> {
 	public void put(HeapItem value) {
 		put(value.getLabel(), value); // TODO: Change hashCode to MD4
 	}
-
+	
 	public void put(Identifier id, Expression expr) {
 		HeapItem prev = get(id.getName());
 		if(prev == null && parent != null) {
@@ -60,6 +60,11 @@ public class Context extends HashMap<Integer, HeapItem> {
 			HeapItem item = new HeapItem(id.getName(), expr);
 			put(item);
 		}
+	}
+	
+	public void putLocal(Identifier id, Expression expr) {
+		HeapItem item = new HeapItem(id.getName(), expr);
+		put(item);
 	}
 	
 	public void remove(Identifier id) {

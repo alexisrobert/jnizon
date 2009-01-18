@@ -29,7 +29,7 @@ public class FunctionCall implements Expression {
 			Context funcContext = ctx.derivate();
 			for (int i = 0; i < argumentIds.length; i++) {
 				Identifier argid = argumentIds[i];
-				funcContext.put(argid, args.get(i));
+				funcContext.putLocal(argid, args.get(i));
 			}
 
 			functionResult = function.evaluate(funcContext);
