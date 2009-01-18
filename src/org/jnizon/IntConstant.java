@@ -18,7 +18,7 @@ public class IntConstant extends Constant {
 	
 	@Override
 	public String toString() {
-		return "org.jnizon.IntConstant[value:" + value + "]";
+		return Integer.toString(value);
 	}
 }
 

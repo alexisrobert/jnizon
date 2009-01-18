@@ -12,6 +12,7 @@ tokens {
 	ASSIGNEMENT;
 	CLEAR;
 	FUNCTIONCALL;
+	FUNCTIONDEF;
 }
 
 @header { package org.jnizon; }
@@ -23,13 +24,25 @@ prog	:	NEWLINE!
 	|	stmt ENDINSTRUCT!
 	|	stmt EOF!;
 
-stmt	:	ID MISCSEP? ASSIGN MISCSEP? expr -> ^(ASSIGNEMENT ID expr)
-	|	ID MISCSEP? UNASSIGN -> ^(CLEAR ID)
+stmt	:	ID WS? ASSIGN WS? expr -> ^(ASSIGNEMENT ID expr)
+	|	ID WS? UNASSIGN -> ^(CLEAR ID)
+	|	ID OPENBRK csid? CLOSEBRK WS? BIND WS? expr -> ^(FUNCTIONDEF ID expr csid?)
 	|	expr;
+
+csid	:	ID UNDERSCORE! ( COMMA! ID UNDERSCORE! )*;
 	
 csexpr	:	expr ( COMMA! expr )*;
 
-expr	:	INT
+
+expr:   multExpr ((PLUS^|MINUS^) multExpr)*
+    ; 
+
+multExpr
+    :   atom (TIMES^ atom)*
+    ; 
+
+atom	:	INT
 	|	ID
-	|	ID OPENBRK csexpr? CLOSEBRK -> ^(FUNCTIONCALL ID csexpr?);
+	|	ID OPENBRK csexpr? CLOSEBRK -> ^(FUNCTIONCALL ID csexpr?)
+	|   LPAREN! expr RPAREN!;
 

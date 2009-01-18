@@ -26,11 +26,10 @@ public class Interpreter {
 		
 		heap = new Heap();
 		global_context = heap.getContext(0);
-		
-		Identifier fid = new Identifier("Test");
-		CodeBlock fbdy = parse("x;");
-		Function func = new Function(fid, fbdy, new Identifier[]{new Identifier("x"), new Identifier("y")});
-		global_context.put(fid, func);
+	}
+	
+	public void define(Function func) {
+		global_context.put(func.getFuncId(), func);
 	}
 
 	public Expression evaluate(String code) throws RecognitionException {
@@ -45,13 +44,11 @@ public class Interpreter {
 		SyntaxParser parser = new SyntaxParser(tkstr);
 
 		parser.setTreeAdaptor(adaptor);
-
-		System.out.println("Starting parsing...");
+		
 		SyntaxParser.start_return result = parser.start();
-		System.out.println("Finished.");
 
 		SyntaxTree tree = (SyntaxTree) result.getTree();
-		printTree(tree, 0);
+		//printTree(tree, 0);
 
 		return (CodeBlock) convertTree(tree);
 	}
@@ -88,6 +85,20 @@ public class Interpreter {
 			else
 				throw new RuntimeException("Id : " + funcid
 						+ " is not a function.");
+		} else if(tree.getType() == SyntaxParser.FUNCTIONDEF) {
+			Identifier funcid = id((CommonTree)tree.getChild(0));
+			Expression funcbody = convertTree((CommonTree)tree.getChild(1));
+			Identifier[] arguments = new Identifier[tree.getChildCount()-2];
+			for (int i = 2; i < tree.getChildCount(); i++) {
+				arguments[i-2] = id((CommonTree) tree.getChild(i));
+			}
+			return new FunctionDefinition(funcid, arguments, funcbody);
+		} else if(tree.getType() == SyntaxParser.PLUS) {
+			List<Expression> arguments = new ArrayList<Expression>();
+			for (int i = 0; i < tree.getChildCount(); i++) {
+				arguments.add(convertTree((CommonTree) tree.getChild(i)));
+			}
+			return new FunctionCall((Function)global_context.get(new Identifier("Plus")), arguments);
 		}
 		return null;
 	}

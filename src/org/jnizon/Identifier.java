@@ -17,4 +17,9 @@ public class Identifier implements Expression {
 		return ctx.get(this);
 	}
 	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
 }
