@@ -15,9 +15,6 @@ public class JNizon {
 		JavaFunction plus = new JavaFunction("Plus", "a", "b") {
 			@Override
 			public Expression execute(Context ctx, Expression[] arguments) {
-				for(int i = 0; i < arguments.length; i++) {
-					System.out.println("A" + i + " : " + arguments[i]);
-				}
 				if(arguments[0] instanceof IntConstant && arguments[1] instanceof IntConstant) {
 					int a = ((IntConstant)arguments[0]).getValue();
 					int b = ((IntConstant)arguments[1]).getValue();

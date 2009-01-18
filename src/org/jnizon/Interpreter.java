@@ -61,7 +61,7 @@ public class Interpreter {
 		SyntaxParser.start_return result = parser.start();
 
 		SyntaxTree tree = (SyntaxTree) result.getTree();
-		printTree(tree, 0);
+		//printTree(tree, 0);
 
 		return (CodeBlock) convertTree(tree);
 	}
