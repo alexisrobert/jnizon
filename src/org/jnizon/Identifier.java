@@ -18,6 +18,16 @@ public class Identifier implements Expression {
 	}
 	
 	@Override
+	public int getChildCount() {
+		return 0;
+	}
+	
+	@Override
+	public Expression getChild(int index) {
+		throw new RuntimeException("SQDOinsqd");
+	}
+	
+	@Override
 	public String toString() {
 		return name;
 	}

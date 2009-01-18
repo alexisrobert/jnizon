@@ -16,4 +16,15 @@ public class Assignment implements Expression {
 		ctx.put(variable, result);
 		return result;
 	}
+	
+	@Override
+	public int getChildCount() {
+		return 1;
+	}
+	
+	@Override
+	public Expression getChild(int index) {
+		if(index == 0) return value;
+		throw new RuntimeException("Out of bounds");
+	}
 }

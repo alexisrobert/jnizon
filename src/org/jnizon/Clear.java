@@ -14,5 +14,15 @@ public class Clear implements Expression {
 		
 		return null;
 	}
-
+	
+	@Override
+	public int getChildCount() {
+		return 1;
+	}
+	
+	@Override
+	public Expression getChild(int index) {
+		//if(index == 0) return Symbol;
+		throw new RuntimeException("Ouf of bounds");
+	}
 }

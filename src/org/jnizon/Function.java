@@ -23,5 +23,21 @@ public abstract class Function implements Expression{
 	public Identifier[] getArguments() {
 		return arguments;
 	}
+	
+	@Override
+	public String toString() {
+		return funcId.getName();
+	}
+	
+	@Override
+	public int getChildCount() {
+		return 1;
+	}
+	
+	@Override
+	public Expression getChild(int index) {
+		if(index == 0) return funcId;
+		throw new RuntimeException("Ouf of bounds");
+	}
 
 }

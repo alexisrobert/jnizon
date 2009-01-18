@@ -11,7 +11,6 @@ tokens {
 	STATEMENT;
 	ASSIGNEMENT;
 	CLEAR;
-	FUNCTIONCALL;
 	FUNCTIONDEF;
 }
 
@@ -34,7 +33,7 @@ csid	:	ID UNDERSCORE! ( COMMA! ID UNDERSCORE! )*;
 csexpr	:	expr ( COMMA! expr )*;
 
 
-expr:   multExpr ((PLUS^|MINUS^) multExpr)*
+expr:   multExpr (PLUS^ multExpr)*
     ; 
 
 multExpr
@@ -43,6 +42,6 @@ multExpr
 
 atom	:	INT
 	|	ID
-	|	ID OPENBRK csexpr? CLOSEBRK -> ^(FUNCTIONCALL ID csexpr?)
+	|	ID OPENBRK csexpr? CLOSEBRK -> ^(ID csexpr?)
 	|   LPAREN! expr RPAREN!;
 

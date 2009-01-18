@@ -10,11 +10,11 @@ public class JNizon {
 	 * @throws RecognitionException
 	 */
 	public static void main(String[] args) throws RecognitionException {
-		Interpreter it = new Interpreter();
 		// Builtins :)
+		BasicForm defaultForm = new BasicForm();
 		JavaFunction plus = new JavaFunction("Plus", "a", "b") {
 			@Override
-			public Expression execute(Expression[] arguments) {
+			public Expression execute(Context ctx, Expression[] arguments) {
 				if(arguments[0] instanceof IntConstant && arguments[1] instanceof IntConstant) {
 					int a = ((IntConstant)arguments[0]).getValue();
 					int b = ((IntConstant)arguments[1]).getValue();
@@ -23,7 +23,10 @@ public class JNizon {
 				return this;
 			}
 		};
+		Interpreter it = new Interpreter(defaultForm);
 		it.define(plus);
+		it.addMapping(SyntaxParser.PLUS, plus.getFuncId());
+		it.define(new BasicForm());
 		
 		Shell sh = new Shell(it);
 		sh.start();

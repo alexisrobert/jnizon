@@ -29,7 +29,7 @@ public class Shell {
 				System.out.print(String.format("Out[%d]= ",iteration));
 				
 				try {
-					System.out.println(interpreter.evaluate(line));
+					interpreter.evaluate(line);
 				} catch (RecognitionException e) {
 					e.printStackTrace();
 				}
