@@ -9,11 +9,15 @@ public class SameQ extends JavaFunction {
 
 	@Override
 	public Expression execute(Context ctx, List<Expression> arguments) {
-		if(arguments.size() >= 2) {
-			Expression a = arguments.get(0).evaluate(ctx);
-			Expression b = arguments.get(1).evaluate(ctx);
-			return new BooleanConstant(a.equals(b));
+		if(arguments.size() <= 1) return this;
+		
+		for (int i = 1; i < arguments.size(); i++) {
+			Expression a = arguments.get(i-1).evaluate(ctx);
+			Expression b = arguments.get(i).evaluate(ctx);
+			if (a.equals(b) == false)
+				return new BooleanConstant(false);
 		}
-		return this;
+		
+		return new BooleanConstant(true);
 	}
 }

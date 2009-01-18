@@ -30,7 +30,7 @@ cexpr	:	ID WS? ASSIGN WS? cexpr -> ^(ASSIGNEMENT ID cexpr)
 	|	OPENLST csexpr? CLOSELST -> ^(LISTFUNC csexpr?)
 	|	ID WS? UNASSIGN -> ^(CLEAR ID)
 	|	ID OPENBRK csid? CLOSEBRK WS? BIND WS? plusExpr -> ^(FUNCTIONDEF ID plusExpr csid?)
-	|	atom EQSAME atom -> ^(SAMEQ atom atom)
+	|	atom (EQSAME atom)+ -> ^(SAMEQ atom atom+)
 	|	plusExpr;
 
 plusExpr:   multExpr (PLUS^ multExpr)*
