@@ -29,5 +29,11 @@ public class FunctionDefinition implements Expression{
 		//if(index == 0) return Symbol;
 		throw new RuntimeException("Ouf of bounds");
 	}
+
+	@Override
+	public boolean equals(Expression expr) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

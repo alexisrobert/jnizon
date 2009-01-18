@@ -33,5 +33,21 @@ public class CodeBlock implements Expression {
 
 	public int getChildCount() {
 		return 1;
+	}
+
+	@Override
+	public boolean equals(Expression expr) {
+		if (!(expr instanceof CodeBlock)) return false;
+		
+		List<Expression> exprs = ((CodeBlock)expr).getStatements();
+		if (exprs.size() != statements.size())
+			return false;
+		
+		for (int i = 0; i < statements.size(); i++) {
+			if (!statements.get(i).equals(exprs.get(i)))
+				return false;
+		}
+		
+		return true;
 	};
 }

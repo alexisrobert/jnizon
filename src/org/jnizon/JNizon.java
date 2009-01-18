@@ -41,6 +41,8 @@ public class JNizon {
 				return new ListExpression(arguments);
 			}
 		};
+		
+		Function sameq = new SameQ();
 		// end of builtins
 		
 		Interpreter it = new Interpreter(defaultForm);
@@ -53,6 +55,9 @@ public class JNizon {
 		
 		it.define(list);
 		it.addMapping(SyntaxParser.LISTFUNC, list.getFuncId());
+		
+		it.define(sameq);
+		it.addMapping(SyntaxParser.SAMEQ, sameq.getFuncId());
 		
 		Shell sh = new Shell(it);
 		sh.start();

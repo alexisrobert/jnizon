@@ -7,4 +7,5 @@ public interface Expression {
 	public int getChildCount();
 	public Expression getChild(int index);
 	
+	public boolean equals(Expression expr);
 }

@@ -27,4 +27,12 @@ public class Assignment implements Expression {
 		if(index == 0) return value;
 		throw new RuntimeException("Out of bounds");
 	}
+
+	@Override
+	public boolean equals(Expression expr) {
+		if (!(expr instanceof Assignment)) return false;
+		
+		Assignment as = (Assignment)expr;
+		return (as.value.equals(value) && as.variable.equals(variable));
+	}
 }

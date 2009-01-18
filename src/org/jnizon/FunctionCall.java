@@ -64,4 +64,10 @@ public class FunctionCall implements Expression {
 		return arguments;
 	}
 
+	@Override
+	public boolean equals(Expression expr) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

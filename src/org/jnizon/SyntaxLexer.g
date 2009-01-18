@@ -18,6 +18,7 @@ UNDERSCORE : '_';
 PLUS : '+';
 TIMES : '*';
 MINUS : '-';
+EQSAME 	:	'===';
 LPAREN : '(';
 RPAREN : ')';
 DBLOPENBRK : '[[';

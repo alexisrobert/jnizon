@@ -29,5 +29,11 @@ public class IntConstant extends Constant {
 	public int getChildCount() {
 		return 0;
 	}
+
+	@Override
+	public boolean equals(Expression expr) {
+		if (!(expr instanceof IntConstant)) return false;
+		return ((IntConstant)expr).getValue() == this.value;
+	}
 }
 

@@ -63,4 +63,10 @@ public class BasicForm extends JavaFunction {
 			System.out.print("<???>");
 		}
 	}
+
+	@Override
+	public boolean equals(Expression expr) {
+		if (expr instanceof BasicForm) return true;
+		else return false;
+	}
 }

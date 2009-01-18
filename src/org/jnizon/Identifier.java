@@ -31,5 +31,11 @@ public class Identifier implements Expression {
 	public String toString() {
 		return name;
 	}
+
+	@Override
+	public boolean equals(Expression expr) {
+		if (!(expr instanceof Identifier)) return false;
+		return ((Identifier)expr).getName().equals(this.name);
+	}
 	
 }

@@ -37,6 +37,12 @@ public class ListExpression implements Expression{
 	public int getChildCount() {
 		return elements.size() + 1;
 	}
+
+	@Override
+	public boolean equals(Expression expr) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 	

@@ -29,4 +29,9 @@ public abstract class Function implements Expression {
 		throw new RuntimeException("Ouf of bounds");
 	}
 
+	@Override
+	public boolean equals(Expression expr) {
+		if (!(expr instanceof Function)) return false;
+		return ((Function)expr).getFuncId().equals(funcId);
+	}
 }

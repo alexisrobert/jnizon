@@ -19,4 +19,9 @@ public class NullExpression implements Expression {
 		return 0;
 	}
 
+	@Override
+	public boolean equals(Expression expr) {
+		return expr instanceof NullExpression;
+	}
+
 }

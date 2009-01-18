@@ -1,5 +1,6 @@
 package org.jnizon;
 
+// TODO: Migrate this to JavaFunction
 public class Clear implements Expression {
 	private Identifier variable;
 	
@@ -24,5 +25,11 @@ public class Clear implements Expression {
 	public Expression getChild(int index) {
 		//if(index == 0) return Symbol;
 		throw new RuntimeException("Ouf of bounds");
+	}
+
+	@Override
+	public boolean equals(Expression expr) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
