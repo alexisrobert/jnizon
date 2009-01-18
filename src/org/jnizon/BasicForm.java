@@ -24,13 +24,23 @@ public class BasicForm extends JavaFunction {
 			}
 		} else if(expr instanceof FunctionCall) {
 			FunctionCall fc = (FunctionCall)expr;
-			System.out.print(fc.getFunction().getFuncId().getName() + "[");
-			Iterator<Expression> it = fc.getArguments().iterator();
-			while(it.hasNext()) {
-				printForm(ctx, it.next()/*.evaluate(ctx)*/);
-				if(it.hasNext()) System.out.print(", ");
+			if(fc.getFunction().getFuncId().getName().equals("Plus")) {
+				printForm(ctx, fc.getArguments().get(0));
+				System.out.print(" + ");
+				printForm(ctx, fc.getArguments().get(1));
+			} else if(fc.getFunction().getFuncId().getName().equals("Times")) {
+				printForm(ctx, fc.getArguments().get(0));
+				System.out.print("*");
+				printForm(ctx, fc.getArguments().get(1));
+			} else {
+				System.out.print(fc.getFunction().getFuncId().getName() + "[");
+				Iterator<Expression> it = fc.getArguments().iterator();
+				while(it.hasNext()) {
+					printForm(ctx, it.next()/*.evaluate(ctx)*/);
+					if(it.hasNext()) System.out.print(", ");
+				}
+				System.out.print("]");
 			}
-			System.out.print("]");
 		} else if(expr instanceof IntConstant) {
 			IntConstant i = (IntConstant)expr;
 			System.out.print(i.getValue());

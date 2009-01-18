@@ -16,7 +16,7 @@ tokens {
 
 @header { package org.jnizon; }
 
-start	:	prog+ -> ^(ROOT prog*);
+start	:	prog* -> ^(ROOT prog*);
 
 prog	:	NEWLINE!
 	|	stmt NEWLINE!
