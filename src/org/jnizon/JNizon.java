@@ -43,6 +43,7 @@ public class JNizon {
 		};
 		
 		Function sameq = new SameQ();
+		Function not = new Not();
 		// end of builtins
 		
 		Interpreter it = new Interpreter(defaultForm);
@@ -58,6 +59,9 @@ public class JNizon {
 		
 		it.define(sameq);
 		it.addMapping(SyntaxParser.SAMEQ, sameq.getFuncId());
+		
+		it.define(not);
+		it.addMapping(SyntaxParser.NOT, not.getFuncId());
 		
 		Shell sh = new Shell(it);
 		sh.start();

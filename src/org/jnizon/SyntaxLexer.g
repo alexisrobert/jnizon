@@ -5,8 +5,7 @@ lexer grammar SyntaxLexer;
 ENDINSTRUCT
 	:	';';
 	
-TRUE	:	'True';
-FALSE	:	'False';
+BOOL	:	'True'|'False';
 
 NEWLINE	:	'\r'?'\n';
 ID	:	('a'..'z'|'A'..'Z') (('a'..'z'|'A'..'Z'|'0'..'9')+)? ;
@@ -29,3 +28,4 @@ DBLOPENBRK : '[[';
 DBLCLOSEBRK : ']]';
 OPENLST : '{';
 CLOSELST : '}';
+EXCL	: '!';

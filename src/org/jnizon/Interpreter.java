@@ -95,10 +95,8 @@ public class Interpreter {
 			return new Clear((Identifier) lval);
 		} else if (tree.getType() == SyntaxParser.INT) {
 			return new IntConstant(Integer.parseInt(tree.getText()));
-		} else if (tree.getType() == SyntaxParser.TRUE) {
-			return new BooleanConstant(true);
-		} else if (tree.getType() == SyntaxParser.FALSE) {
-			return new BooleanConstant(false);
+		} else if (tree.getType() == SyntaxParser.BOOL) {
+			return BooleanConstant.parseBool(tree.getText());
 		} else if (tree.getType() == SyntaxParser.ID
 				&& tree.getChildCount() == 0) {
 			return id(tree);

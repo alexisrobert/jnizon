@@ -38,4 +38,9 @@ public class BooleanConstant extends Constant {
 		return 0;
 	}
 
+	public static Expression parseBool(String text) {
+		if (text.equals("True")) return new BooleanConstant(true);
+		else if (text.equals("False")) return new BooleanConstant(false);
+		else return new NullExpression();
+	}
 }

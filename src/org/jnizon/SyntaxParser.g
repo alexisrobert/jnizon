@@ -14,6 +14,7 @@ tokens {
 	CODEBLOCK;
 	LISTFUNC;
 	SAMEQ;
+	NOT;
 }
 
 @header { package org.jnizon; }
@@ -25,11 +26,11 @@ csexpr	:	expr ( COMMA! expr )*;
 
 expr: cexpr WS? (ENDINSTRUCT WS? expr)* -> ^(CODEBLOCK cexpr expr*);
 
-cexpr	:	atom EQSAME atom -> ^(SAMEQ atom atom)
-	|	ID WS? ASSIGN WS? cexpr -> ^(ASSIGNEMENT ID cexpr)
+cexpr	:	ID WS? ASSIGN WS? cexpr -> ^(ASSIGNEMENT ID cexpr)
 	|	OPENLST csexpr? CLOSELST -> ^(LISTFUNC csexpr?)
 	|	ID WS? UNASSIGN -> ^(CLEAR ID)
 	|	ID OPENBRK csid? CLOSEBRK WS? BIND WS? plusExpr -> ^(FUNCTIONDEF ID plusExpr csid?)
+	|	atom EQSAME atom -> ^(SAMEQ atom atom)
 	|	plusExpr;
 
 plusExpr:   multExpr (PLUS^ multExpr)*
@@ -40,9 +41,9 @@ multExpr
     ; 
 
 atom	:	INT
-	|	TRUE
-	|	FALSE
+	|	BOOL
 	|	ID
 	|	ID OPENBRK csexpr? CLOSEBRK -> ^(ID csexpr?)
+	|	EXCL WS? BOOL -> ^(NOT BOOL)
 	|   LPAREN! expr RPAREN!;
 
