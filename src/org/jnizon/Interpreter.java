@@ -61,7 +61,7 @@ public class Interpreter {
 		SyntaxParser.start_return result = parser.start();
 
 		SyntaxTree tree = (SyntaxTree) result.getTree();
-		//printTree(tree, 0);
+		printTree(tree, 0);
 
 		return (CodeBlock) convertTree(tree);
 	}
@@ -84,7 +84,7 @@ public class Interpreter {
 			return new Clear((Identifier) lval);
 		} else if (tree.getType() == SyntaxParser.INT) {
 			return new IntConstant(Integer.parseInt(tree.getText()));
-		} else if (tree.getType() == SyntaxParser.ID) {
+		} else if (tree.getType() == SyntaxParser.ID && tree.getChildCount() == 0) {
 			return id(tree);
 		} else if (tree.getType() == SyntaxParser.FUNCTIONDEF) {
 			Identifier funcid = id((CommonTree) tree.getChild(0));
@@ -95,7 +95,6 @@ public class Interpreter {
 			}
 			return new FunctionDefinition(funcid, arguments, funcbody);
 		} else {
-			
 			Identifier funcid;
 			funcid = mappings.get(tree.getType());
 			if(funcid == null) funcid = id(tree);

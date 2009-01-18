@@ -18,6 +18,7 @@ public class FunctionCall implements Expression {
 		List<Expression> args = new ArrayList<Expression>();
 		for (Expression arg : arguments) {
 			Expression result = arg.evaluate(ctx);
+			System.out.println("arg : " + arg + " => " + result);
 			args.add(result);
 		}
 		Context funcContext = ctx.derivate();
