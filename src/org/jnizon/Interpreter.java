@@ -10,7 +10,6 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
-import org.antlr.runtime.tree.ParseTree;
 
 public class Interpreter {
 	private CommonTreeAdaptor adaptor;
@@ -29,8 +28,8 @@ public class Interpreter {
 		global_context = heap.getContext(0);
 		
 		Identifier fid = new Identifier("Test");
-		CodeBlock fbdy = parse("4242;");
-		Function func = new Function(fid, fbdy, new Identifier[]{});
+		CodeBlock fbdy = parse("x;");
+		Function func = new Function(fid, fbdy, new Identifier[]{new Identifier("x"), new Identifier("y")});
 		global_context.put(fid, func);
 	}
 
