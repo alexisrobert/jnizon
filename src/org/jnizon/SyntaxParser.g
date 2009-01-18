@@ -10,6 +10,7 @@ tokens {
 	ROOT;
 	STATEMENT;
 	ASSIGNEMENT;
+	CLEAR;
 	FUNCTIONCALL;
 }
 
@@ -23,6 +24,7 @@ prog	:	NEWLINE!
 	|	stmt EOF!;
 
 stmt	:	ID MISCSEP? ASSIGN MISCSEP? expr -> ^(ASSIGNEMENT ID expr)
+	|	ID MISCSEP? UNASSIGN -> ^(CLEAR ID)
 	|	expr;
 	
 csexpr	:	expr ( COMMA! expr )*;

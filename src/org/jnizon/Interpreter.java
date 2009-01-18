@@ -65,11 +65,14 @@ public class Interpreter {
 				}
 			}
 			return block;
-		} else if (tree.getType() == SyntaxParser.ASSIGNEMENT) {
+		} else if(tree.getType() == SyntaxParser.ASSIGNEMENT) {
 			Identifier lval = id((CommonTree) tree.getChild(0));
 			Expression rVal = convertTree((CommonTree) tree.getChild(1));
 			return new Assignment((Identifier) lval, rVal);
-		} else if (tree.getType() == SyntaxParser.INT) {
+		} else if(tree.getType() == SyntaxParser.CLEAR) {
+			Identifier lval = id((CommonTree)tree.getChild(0));
+			return new Clear((Identifier)lval);
+		} else if(tree.getType() == SyntaxParser.INT) {
 			return new IntConstant(Integer.parseInt(tree.getText()));
 		} else if (tree.getType() == SyntaxParser.ID) {
 			return id(tree);

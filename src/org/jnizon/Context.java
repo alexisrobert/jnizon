@@ -18,6 +18,10 @@ public class Context extends HashMap<Integer, HeapItem> {
 		this.parent = parent;
 	}
 
+	public boolean containsKey(Identifier id) {
+		return containsKey(Integer.valueOf(id.getName().hashCode()));
+	}
+
 	public Context getParent() {
 		return parent;
 	}
@@ -52,7 +56,11 @@ public class Context extends HashMap<Integer, HeapItem> {
 		HeapItem item = new HeapItem(id.getName(), expr);
 		put(item);
 	}
-
+	
+	public void remove(Identifier id) {
+		remove(Integer.valueOf(id.getName().hashCode()));
+	}
+	
 	public int getContextId() {
 		return context_id;
 	}
