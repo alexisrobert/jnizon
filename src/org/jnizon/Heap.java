@@ -15,18 +15,22 @@ package org.jnizon;
 import java.util.HashMap;
 
 public class Heap {
+	
+	private static int lastId = -1;
 	private HashMap<Integer, Context> heap;
 	
 	public Heap() {
 		heap = new HashMap<Integer, Context>();
 		
 		// Create global context
-		newContext(0);
+		newContext();
 	}
 	
-	public void newContext(int context_id) {
-		Context ctx = new Context(context_id);
-		heap.put(context_id, ctx);
+	public int newContext() {
+		lastId++;
+		Context ctx = new Context(lastId, this);
+		heap.put(lastId, ctx);
+		return lastId;
 	}
 	
 	public Context getContext(int context_id) {

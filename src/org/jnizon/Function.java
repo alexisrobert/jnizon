@@ -1,6 +1,6 @@
 package org.jnizon;
 
-public class Function {
+public class Function implements Expression{
 
 	private Identifier funcId;
 	private CodeBlock code;
@@ -9,6 +9,7 @@ public class Function {
 	public Function(Identifier funcId, CodeBlock code, Identifier[] arguments) {
 		this.funcId = funcId;
 		this.code = code;
+		this.arguments = arguments;
 	}
 
 	public CodeBlock getCode() {
@@ -21,6 +22,11 @@ public class Function {
 	
 	public Identifier[] getArguments() {
 		return arguments;
+	}
+	
+	@Override
+	public Expression evaluate(Context ctx) {
+		return this;
 	}
 
 }
