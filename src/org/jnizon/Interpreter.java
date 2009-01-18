@@ -45,12 +45,12 @@ public class Interpreter {
 	}
 
 	public Expression evaluate(String code) throws RecognitionException {
-		CodeBlock main = parse(code);
+		Expression main = parse(code);
 		return new FunctionCall(defaultForm, Collections.singletonList(main
 				.evaluate(global_context))).evaluate(global_context);
 	}
 
-	public CodeBlock parse(String code) throws RecognitionException {
+	public Expression parse(String code) throws RecognitionException {
 		ANTLRStringStream str = new ANTLRStringStream(code);
 		SyntaxLexer lexer = new SyntaxLexer(str);
 		TokenStream tkstr = new CommonTokenStream(lexer);
@@ -61,20 +61,23 @@ public class Interpreter {
 		SyntaxParser.start_return result = parser.start();
 
 		SyntaxTree tree = (SyntaxTree) result.getTree();
-		//printTree(tree, 0);
+		//printTree(tree, 0);// print raw AST
 
-		return (CodeBlock) convertTree(tree);
+		return convertTree(tree);
 	}
 
 	public Expression convertTree(CommonTree tree) {
-		if (tree.getType() == SyntaxParser.ROOT) {
-			CodeBlock block = new CodeBlock();
+		if(tree == null) return new NullExpression();
+		if (tree.getType() == SyntaxParser.CODEBLOCK) {
 			if (tree.getChildren() != null) {
+				if(tree.getChildCount() == 1) return convertTree((CommonTree)tree.getChild(0));//Simplify a bit the tree, no 1 element codeblock
+				CodeBlock block = new CodeBlock();
 				for (Object child : tree.getChildren()) {
 					block.getStatements().add(convertTree((CommonTree) child));
 				}
+				return block;
 			}
-			return block;
+			return new NullExpression();
 		} else if (tree.getType() == SyntaxParser.ASSIGNEMENT) {
 			Identifier lval = id((CommonTree) tree.getChild(0));
 			Expression rVal = convertTree((CommonTree) tree.getChild(1));

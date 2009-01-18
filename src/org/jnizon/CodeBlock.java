@@ -14,6 +14,7 @@ public class CodeBlock implements Expression {
 	@Override
 	public Expression evaluate(Context ctx) {
 		Expression result = null;
+		if(statements.size() == 0) return new NullExpression();
 		for (Expression expr : statements) {
 			result = expr.evaluate(ctx);
 		}

@@ -16,7 +16,7 @@ public class FunctionDefinition implements Expression{
 	public Expression evaluate(Context ctx) {
 		Function func = new InlineFunction(functionId, arguments, functionBody);
 		ctx.put(functionId, func);
-		return this;
+		return new NullExpression();
 	}
 	
 	@Override

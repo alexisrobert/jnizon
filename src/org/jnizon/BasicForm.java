@@ -47,8 +47,10 @@ public class BasicForm extends JavaFunction {
 		} else if(expr instanceof Identifier) {
 			Identifier id = (Identifier)expr;
 			System.out.print(id.evaluate(ctx));
+		} else if(expr instanceof NullExpression) {
+			
 		} else {
-			System.out.print("???");
+			System.out.print("<???>");
 		}
 	}
 }

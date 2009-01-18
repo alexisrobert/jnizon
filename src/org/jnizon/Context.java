@@ -53,8 +53,13 @@ public class Context extends HashMap<Integer, HeapItem> {
 	}
 
 	public void put(Identifier id, Expression expr) {
-		HeapItem item = new HeapItem(id.getName(), expr);
-		put(item);
+		HeapItem prev = get(id.getName());
+		if(prev == null && parent != null) {
+			parent.put(id, expr);
+		} else {
+			HeapItem item = new HeapItem(id.getName(), expr);
+			put(item);
+		}
 	}
 	
 	public void remove(Identifier id) {

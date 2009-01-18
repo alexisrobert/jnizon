@@ -7,33 +7,28 @@ backtrack=true;
 }
 
 tokens {
-	ROOT;
 	STATEMENT;
 	ASSIGNEMENT;
 	CLEAR;
 	FUNCTIONDEF;
+	CODEBLOCK;
 }
 
 @header { package org.jnizon; }
 
-start	:	prog* -> ^(ROOT prog*);
-
-prog	:	NEWLINE!
-	|	stmt NEWLINE!
-	|	stmt ENDINSTRUCT!
-	|	stmt EOF!;
-
-stmt	:	ID WS? ASSIGN WS? expr -> ^(ASSIGNEMENT ID expr)
-	|	ID WS? UNASSIGN -> ^(CLEAR ID)
-	|	ID OPENBRK csid? CLOSEBRK WS? BIND WS? expr -> ^(FUNCTIONDEF ID expr csid?)
-	|	expr;
-
+start	:	expr? -> ^(CODEBLOCK expr?);
 csid	:	ID UNDERSCORE! ( COMMA! ID UNDERSCORE! )*;
 	
 csexpr	:	expr ( COMMA! expr )*;
 
+expr: cexpr WS? (ENDINSTRUCT WS? expr)* -> ^(CODEBLOCK cexpr expr*);
 
-expr:   multExpr (PLUS^ multExpr)*
+cexpr	:	ID WS? ASSIGN WS? plusExpr -> ^(ASSIGNEMENT ID plusExpr)
+	|	ID WS? UNASSIGN -> ^(CLEAR ID)
+	|	ID OPENBRK csid? CLOSEBRK WS? BIND WS? plusExpr -> ^(FUNCTIONDEF ID plusExpr csid?)
+	|	plusExpr;
+
+plusExpr:   multExpr (PLUS^ multExpr)*
     ; 
 
 multExpr
