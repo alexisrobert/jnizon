@@ -38,7 +38,7 @@ public class JNizon {
 		Function list = new JavaFunction("List") {
 			@Override
 			public Expression execute(Context ctx, List<Expression> arguments) {
-				return new ListExpression(arguments);
+				return new ListExpression(arguments).evaluate(ctx);
 			}
 		};
 		// end of builtins
