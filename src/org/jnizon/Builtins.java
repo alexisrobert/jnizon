@@ -18,10 +18,13 @@ public class Builtins {
 	
 	public static final Symbol holdFirst = new Symbol("HoldFirst");
 	public static final Symbol holdAll = new Symbol("HoldAll");
+	public static final Symbol holdRest = new Symbol("HoldRest");
 	
 	public static final Symbol set = new Symbol("Set");
 	public static final Symbol setDelayed = new Symbol("SetDelayed");
 	
 	public static final Symbol time = new Symbol("Time");
+	
+	public static final Symbol ifCondition = new Symbol("If");
 	
 }

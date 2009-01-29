@@ -33,17 +33,22 @@ public class FunctionCall implements Expression {
 			if (attributes.contains(Builtins.holdFirst))
 				holdFirst = true;
 		}
-		
+
 		List<Expression> evaluatedArguments;
 		if (!attributes.contains(Builtins.holdAll)) {
 			evaluatedArguments = new ArrayList<Expression>();
-			int start = 0;
-			if (holdFirst) {
-				start = 1;
-				evaluatedArguments.add(arguments.get(0));
+			if (attributes.contains(Builtins.holdRest)) {
+				evaluatedArguments.add(arguments.get(0).evaluate(ctx));
+				evaluatedArguments.addAll(arguments.subList(1, arguments.size())); 
+			} else {
+				int start = 0;
+				if (holdFirst) {
+					start = 1;
+					evaluatedArguments.add(arguments.get(0));
+				}
+				for (int i = start; i < arguments.size(); i++)
+					evaluatedArguments.add(arguments.get(i).evaluate(ctx));
 			}
-			for (int i = start; i < arguments.size(); i++)
-				evaluatedArguments.add(arguments.get(i).evaluate(ctx));
 		} else {
 			evaluatedArguments = arguments;
 		}

@@ -27,9 +27,12 @@ public class JNizon {
 		it.define(Builtins.blank);
 		it.define(Builtins.pattern);
 		it.define(Builtins.holdFirst);
+		it.define(Builtins.holdAll);
+		it.define(Builtins.holdRest);
 		it.define(Builtins.set, new Set(), Builtins.holdFirst);
 		it.define(Builtins.setDelayed, new Set(), Builtins.holdAll);
 		it.define(Builtins.time, new Time());
+		it.define(Builtins.ifCondition, new IfCondition(), Builtins.holdRest);
 		
 		it.addMapping(SyntaxParser.PLUS, Builtins.plus);
 		
