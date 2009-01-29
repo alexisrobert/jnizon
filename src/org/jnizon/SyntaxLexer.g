@@ -27,3 +27,5 @@ RPAREN : ')';
 OPENLST : '{';
 CLOSELST : '}';
 EXCL	: '!';
+GT : '>';
+LT : '<';

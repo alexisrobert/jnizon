@@ -27,4 +27,7 @@ public class Builtins {
 	
 	public static final Symbol ifCondition = new Symbol("If");
 	
+	public static final Symbol greater = new Symbol("Greater");
+	public static final Symbol less = new Symbol("Less");
+	
 }

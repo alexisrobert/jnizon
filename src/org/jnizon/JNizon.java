@@ -33,6 +33,8 @@ public class JNizon {
 		it.define(Builtins.setDelayed, new Set(), Builtins.holdAll);
 		it.define(Builtins.time, new Time());
 		it.define(Builtins.ifCondition, new IfCondition(), Builtins.holdRest);
+		it.define(Builtins.greater, new Greater());
+		it.define(Builtins.less, new Less());
 		
 		it.addMapping(SyntaxParser.PLUS, Builtins.plus);
 		
@@ -46,6 +48,8 @@ public class JNizon {
 		it.define(not);
 		it.addMapping(SyntaxParser.NOT, not.getFuncId());*/
 		
+		it.addMapping(SyntaxParser.GREATER, Builtins.greater);
+		it.addMapping(SyntaxParser.LESS, Builtins.less);
 		
 		it.addMapping(SyntaxParser.BLANK, Builtins.blank);
 		

@@ -19,6 +19,8 @@ tokens {
 	PATTERN;
 	FUNCTIONCALL;
 	SETDELAYED;
+	GREATER;
+	LESS;
 }
 
 @header { package org.jnizon; }
@@ -37,7 +39,12 @@ cexpr	:	plusExpr WS? ASSIGN WS? cexpr -> ^(FUNCTIONCALL SET plusExpr cexpr)
 	|	ID WS? UNASSIGN -> ^(CLEAR ID)
 //	|	ID OPENBRK csid? CLOSEBRK WS? BIND WS? plusExpr -> ^(FUNCTIONDEF ID plusExpr csid?)
 	|	atom (EQSAME atom)+ -> ^(SAMEQ atom atom+)
+	|	conditional
 	|	plusExpr;
+
+conditional: e1=plusExpr GT e2=plusExpr -> ^(FUNCTIONCALL GREATER $e1 $e2)
+	|	e1=plusExpr LT e2=plusExpr -> ^(FUNCTIONCALL LESS $e1 $e2)
+	;
 
 plusExpr:   multExpr (PLUS multExpr)+ -> ^(FUNCTIONCALL PLUS multExpr multExpr+)
 	| multExpr
