@@ -29,3 +29,4 @@ EXCL	: '!';
 GT : '>';
 LT : '<';
 MINUS : '-';
+INTERRO : '?';

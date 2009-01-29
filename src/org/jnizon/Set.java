@@ -24,7 +24,10 @@ public class Set extends AbstractDownCode {
 		List<Expression> args = new ArrayList<Expression>();
 		args.add(lvalue);
 		args.add(expr);
-		if(lvalue instanceof Symbol) vals.addOwnValue(new FunctionCall(Builtins.rule, args));
+		if(lvalue instanceof Symbol) {
+			vals.getOwnValues().clear();
+			vals.addOwnValue(new FunctionCall(Builtins.rule, args));
+		}
 		else vals.addDownValue(new FunctionCall(Builtins.rule, args));
 		
 		ctx.put(s, vals);
