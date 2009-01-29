@@ -35,6 +35,8 @@ public class JNizon {
 		it.define(Builtins.ifCondition, new IfCondition(), Builtins.holdRest);
 		it.define(Builtins.greater, new Greater());
 		it.define(Builtins.less, new Less());
+		it.define(Builtins.whileLoop, new WhileLoop(), Builtins.holdAll);
+		it.define(Builtins.print, new Print());
 		
 		it.addMapping(SyntaxParser.PLUS, Builtins.plus);
 		
