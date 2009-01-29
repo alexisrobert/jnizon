@@ -61,6 +61,10 @@ public class JNizon {
 		
 		it.define(Builtins.rule);
 		
+		// <YOUHOU>
+		it.evaluate("Abs[x_] := If[x > 0, x, -x]");
+		// </YOUHOU>
+		
 		Shell sh = new Shell(it);
 		sh.start();
 	}

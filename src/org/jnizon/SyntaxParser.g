@@ -21,6 +21,7 @@ tokens {
 	SETDELAYED;
 	GREATER;
 	LESS;
+	MINUSONE;
 }
 
 @header { package org.jnizon; }
@@ -47,7 +48,7 @@ conditional: e1=plusExpr GT e2=plusExpr -> ^(FUNCTIONCALL GREATER $e1 $e2)
 	;
 
 plusExpr:   multExpr (PLUS multExpr)+ -> ^(FUNCTIONCALL PLUS multExpr multExpr+)
-	| multExpr
+	|	multExpr
     ; 
 
 multExpr
@@ -57,6 +58,7 @@ multExpr
 
 atom	:	INT
 	|	BOOL
+	|	MINUS atom -> ^(FUNCTIONCALL TIMES MINUSONE atom)
 	|	ID
 	|	UNDERSCORE -> ^(FUNCTIONCALL BLANK)
 	|	ID UNDERSCORE -> ^(FUNCTIONCALL PATTERN ID ^(FUNCTIONCALL BLANK))

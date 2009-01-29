@@ -82,6 +82,9 @@ public class Interpreter {
 	public Expression convertTree(CommonTree tree) {
 		if (tree == null)
 			return new NullExpression();
+		if(tree.getType() == SyntaxParser.MINUSONE) {
+			return new IntConstant(-1);
+		}
 		if (tree.getType() == SyntaxParser.CODEBLOCK) {
 			if (tree.getChildren() != null) {
 				if (tree.getChildCount() == 1)
@@ -132,6 +135,7 @@ public class Interpreter {
 		if (tree == null) {
 			return;
 		}
+		System.out.println(tree.getText());
 		if (tree.getChildren() != null) {
 			for (Object child : tree.getChildren()) {
 				printTree((CommonTree) child, indent + 1);
