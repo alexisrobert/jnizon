@@ -10,15 +10,6 @@ public class JNizon {
 	 * @throws RecognitionException
 	 */
 	public static void main(String[] args) throws RecognitionException {
-		// Builtins :)
-		
-		
-		
-		
-		/*Function sameq = new SameQ();
-		Function not = new Not();*/
-		// end of builtins
-		
 		Interpreter it = new Interpreter(Builtins.basicForm);
 		
 		it.define(Builtins.basicForm, new BasicForm());
@@ -38,6 +29,8 @@ public class JNizon {
 		it.define(Builtins.whileLoop, new WhileLoop(), Builtins.holdAll);
 		it.define(Builtins.print, new Print());
 		it.define(Builtins.part, new Part());
+		it.define(Builtins.sameq, new SameQ());
+		it.define(Builtins.not, new Not());
 		it.define(Builtins.length, new Length());
 		
 		it.addMapping(SyntaxParser.PLUS, Builtins.plus);
@@ -48,11 +41,9 @@ public class JNizon {
 		
 		it.addMapping(SyntaxParser.PART, Builtins.part);
 		
-		/*it.define(sameq);
-		it.addMapping(SyntaxParser.SAMEQ, sameq.getFuncId());
+		it.addMapping(SyntaxParser.SAMEQ, Builtins.sameq);
 		
-		it.define(not);
-		it.addMapping(SyntaxParser.NOT, not.getFuncId());*/
+		it.addMapping(SyntaxParser.NOT, Builtins.not);
 		
 		it.addMapping(SyntaxParser.GREATER, Builtins.greater);
 		it.addMapping(SyntaxParser.LESS, Builtins.less);

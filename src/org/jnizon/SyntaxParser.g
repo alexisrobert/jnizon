@@ -39,7 +39,7 @@ cexpr	:	plusExpr WS? ASSIGN WS? cexpr -> ^(FUNCTIONCALL SET plusExpr cexpr)
 	|	plusExpr WS? BIND WS? cexpr -> ^(FUNCTIONCALL SETDELAYED plusExpr cexpr)
 	|	ID WS? UNASSIGN -> ^(CLEAR ID)
 //	|	ID OPENBRK csid? CLOSEBRK WS? BIND WS? plusExpr -> ^(FUNCTIONDEF ID plusExpr csid?)
-	|	atom (EQSAME atom)+ -> ^(SAMEQ atom atom+)
+	|	atom (EQSAME atom)+ -> ^(FUNCTIONCALL SAMEQ atom atom+)
 	|	atom OPENBRK OPENBRK plusExpr CLOSEBRK CLOSEBRK -> ^(FUNCTIONCALL PART atom plusExpr)
 	|	conditional
 	|	plusExpr;
@@ -65,6 +65,6 @@ atom	:	INT
 	|	UNDERSCORE -> ^(FUNCTIONCALL BLANK)
 	|	ID UNDERSCORE -> ^(FUNCTIONCALL PATTERN ID ^(FUNCTIONCALL BLANK))
 	|	ID OPENBRK csexpr? CLOSEBRK -> ^(FUNCTIONCALL ID csexpr?)
-	|	EXCL WS? BOOL -> ^(NOT BOOL)
+	|	EXCL WS? e1=BOOL -> ^(FUNCTIONCALL NOT $e1)
 	|   LPAREN! expr RPAREN!;
 
