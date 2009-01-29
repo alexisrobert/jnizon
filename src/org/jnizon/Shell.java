@@ -33,8 +33,8 @@ public class Shell {
 				System.out.print(String.format("Out[%d]= ", iteration));
 
 				try {
-					System.out.println(interpreter.evaluate(line));
-					//interpreter.evaluate(line);
+					//System.out.println(interpreter.evaluate(line));
+					interpreter.evaluate(line);
 					//Expression tree = interpreter.parse(line);
 					
 				} catch (RecognitionException e) {
