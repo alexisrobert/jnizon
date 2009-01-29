@@ -34,4 +34,6 @@ public class Builtins {
 	public static final Symbol greater = new Symbol("Greater");
 	public static final Symbol less = new Symbol("Less");
 	
+	public static final Symbol flat = new Symbol("Flat");
+	
 }

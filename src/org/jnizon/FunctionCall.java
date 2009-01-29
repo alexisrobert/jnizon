@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.jnizon.matching.MatchResult;
 import org.jnizon.matching.PatternMatcher;
@@ -25,13 +26,28 @@ public class FunctionCall implements Expression {
 
 		List<Symbol> attributes = Collections.emptyList();
 
-		boolean holdFirst = false;
-
 		if (fid instanceof Symbol) {
 			sValues = ctx.get((Symbol) fid);
 			attributes = sValues.getAttributes();
-			if (attributes.contains(Builtins.holdFirst))
-				holdFirst = true;
+		}
+		
+		if(attributes.contains(Builtins.flat)) {
+			List<Expression> nArgs = new ArrayList<Expression>(arguments);
+			ListIterator<Expression> it = nArgs.listIterator();
+			boolean changed = false;
+			while(it.hasNext()) {
+				Expression arg = it.next();
+				if(arg instanceof FunctionCall) {
+					FunctionCall call = (FunctionCall)arg;
+					if(call.getFunctionId().equals(functionId)) {
+						changed = true;
+						it.remove();
+						for(Expression na : call.getArguments())
+							it.add(na);
+					}
+				}
+			}
+			if(changed) return new FunctionCall(functionId, nArgs);
 		}
 
 		List<Expression> evaluatedArguments;
@@ -42,7 +58,7 @@ public class FunctionCall implements Expression {
 				evaluatedArguments.addAll(arguments.subList(1, arguments.size())); 
 			} else {
 				int start = 0;
-				if (holdFirst) {
+				if (attributes.contains(Builtins.holdFirst)) {
 					start = 1;
 					evaluatedArguments.add(arguments.get(0));
 				}

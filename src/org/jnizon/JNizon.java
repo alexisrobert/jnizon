@@ -22,8 +22,8 @@ public class JNizon {
 		Interpreter it = new Interpreter(Builtins.basicForm);
 		
 		it.define(Builtins.basicForm, new BasicForm());
-		it.define(Builtins.plus, new Plus());
-		it.define(Builtins.times, new Times());
+		it.define(Builtins.plus, new Plus(), Builtins.flat);
+		it.define(Builtins.times, new Times(), Builtins.flat);
 		it.define(Builtins.blank);
 		it.define(Builtins.pattern);
 		it.define(Builtins.holdFirst);
