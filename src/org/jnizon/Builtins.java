@@ -41,5 +41,6 @@ public class Builtins {
 	
 	public static final Symbol sameq = new Symbol("SameQ");
 	public static final Symbol not = new Symbol("Not");
+	public static final Symbol clear = new Symbol("Clear");
 
 }

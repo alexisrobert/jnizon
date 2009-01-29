@@ -32,6 +32,7 @@ public class JNizon {
 		it.define(Builtins.sameq, new SameQ());
 		it.define(Builtins.not, new Not());
 		it.define(Builtins.length, new Length());
+		it.define(Builtins.clear, new Clear(), Builtins.holdAll);
 		
 		it.addMapping(SyntaxParser.PLUS, Builtins.plus);
 		

@@ -104,7 +104,12 @@ public class Interpreter {
 			return new NullExpression();
 		} else if (tree.getType() == SyntaxParser.CLEAR) {
 			Symbol lval = id((CommonTree) tree.getChild(0));
-			return new Clear(lval);
+			List<Expression> values = new ArrayList<Expression>();
+			values.add(lval);
+			
+			new Clear().execute(global_context, values);
+			
+			return lval;
 		} else if (tree.getType() == SyntaxParser.INT) {
 			return new IntConstant(Integer.parseInt(tree.getText()));
 		} else if (tree.getType() == SyntaxParser.BOOL) {
