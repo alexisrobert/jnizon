@@ -13,8 +13,8 @@ public class BooleanConstant extends Constant {
 	
 	@Override
 	public String toString() {
-		if (value == true) return "True";
-		else return "False";
+		if (getValue()) return "True";
+		return "False";
 	}
 	
 	@Override

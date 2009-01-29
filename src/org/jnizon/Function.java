@@ -2,13 +2,13 @@ package org.jnizon;
 
 public abstract class Function implements Expression {
 
-	private Identifier funcId;
+	private Symbol funcId;
 
-	public Function(Identifier funcId) {
+	public Function(Symbol funcId) {
 		this.funcId = funcId;
 	}
 
-	public Identifier getFuncId() {
+	public Symbol getFuncId() {
 		return funcId;
 	}
 
@@ -28,8 +28,12 @@ public abstract class Function implements Expression {
 			return funcId;
 		throw new RuntimeException("Ouf of bounds");
 	}
-
+	
 	@Override
+	public Expression getHead() {
+		throw new RuntimeException("Dont do that !");
+	}
+
 	public boolean equals(Expression expr) {
 		if (!(expr instanceof Function)) return false;
 		return ((Function)expr).getFuncId().equals(funcId);

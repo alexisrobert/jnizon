@@ -24,8 +24,6 @@ MINUS : '-';
 EQSAME 	:	'===';
 LPAREN : '(';
 RPAREN : ')';
-DBLOPENBRK : '[[';
-DBLCLOSEBRK : ']]';
 OPENLST : '{';
 CLOSELST : '}';
 EXCL	: '!';

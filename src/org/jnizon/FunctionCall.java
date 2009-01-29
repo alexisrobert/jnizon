@@ -1,62 +1,91 @@
 package org.jnizon;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+
+import org.jnizon.matching.MatchResult;
+import org.jnizon.matching.PatternMatcher;
 
 public class FunctionCall implements Expression {
 
-	private Identifier functionId;
+	private Expression functionId;
 	private List<Expression> arguments;
 
-	public FunctionCall(Identifier functionId, List<Expression> arguments) {
+	public FunctionCall(Expression functionId, List<Expression> arguments) {
 		this.functionId = functionId;
 		this.arguments = arguments;
 	}
 
 	@Override
 	public Expression evaluate(Context ctx) {
-		Expression functionResult;//TODO not very clean, must find a way to conceal javafuncs & inline funcs
-		List<Expression> args = new ArrayList<Expression>();
-		for (Expression arg : arguments) {
-			Expression result = arg.evaluate(ctx);
-			args.add(result);
-		}
-		Expression function = ctx.get(functionId);
-		if (function instanceof JavaFunction) {
-			functionResult = ((JavaFunction)function).execute(ctx, args);
-		} else if (function instanceof InlineFunction){
-			Identifier[] argumentIds = ((InlineFunction)function).getArguments();
-			Context funcContext = ctx.derivate();
-			for (int i = 0; i < argumentIds.length; i++) {
-				Identifier argid = argumentIds[i];
-				funcContext.putLocal(argid, args.get(i));
-			}
+		Expression fid = functionId.evaluate(ctx);
+		SymbolValues sValues = null;
 
-			functionResult = function.evaluate(funcContext);
+		List<Symbol> attributes = Collections.emptyList();
+
+		boolean holdFirst = false;
+
+		if (fid instanceof Symbol) {
+			sValues = ctx.get((Symbol) fid);
+			attributes = sValues.getAttributes();
+			if (attributes.contains(Builtins.holdFirst))
+				holdFirst = true;
+		}
+		
+		List<Expression> evaluatedArguments;
+		if (!attributes.contains(Builtins.holdAll)) {
+			evaluatedArguments = new ArrayList<Expression>();
+			int start = 0;
+			if (holdFirst) {
+				start = 1;
+				evaluatedArguments.add(arguments.get(0));
+			}
+			for (int i = start; i < arguments.size(); i++)
+				evaluatedArguments.add(arguments.get(i).evaluate(ctx));
 		} else {
-			return new FunctionCall(functionId, args);
+			evaluatedArguments = arguments;
 		}
-		if (functionResult == function) {
-			return new FunctionCall(functionId, args);
+
+		if (sValues == null)
+			return new FunctionCall(fid, evaluatedArguments);
+		if (sValues.hasDownCode()) {
+			Expression r = sValues.getDownCode().execute(ctx,
+					evaluatedArguments);
+			if (r == null)
+				return new FunctionCall(fid, evaluatedArguments);
+			return r;
 		}
-		return functionResult;
+
+		List<Expression> downValues = sValues.getDownValues();
+		PatternMatcher matcher = new PatternMatcher();
+		for (Expression rule : downValues) {
+			if (!rule.getHead().equals(Builtins.rule))
+				throw new RuntimeException("No rule in downvalues");
+			Expression pattern = rule.getChild(0);
+			Expression replacement = rule.getChild(1);
+			MatchResult result = matcher.match(ctx, pattern, this);
+			if (result.isMatched()) {
+				if (result.getRoot() != this)
+					throw new RuntimeException("WTF ?");
+				return replacement.evaluate(result.getContext());
+			}
+		}
+		return new FunctionCall(fid, evaluatedArguments);
 	}
 
 	@Override
 	public int getChildCount() {
-		return 1 + arguments.size();
+		return arguments.size();
 	}
 
 	@Override
 	public Expression getChild(int index) {
-		if (index == 0)
-			return functionId;
-		else if (index < arguments.size() + 1)
-			return arguments.get(index - 1);
-		throw new RuntimeException("Ouf of bounds");
+		return arguments.get(index);
 	}
 
-	public Identifier getFunctionId() {
+	public Expression getFunctionId() {
 		return functionId;
 	}
 
@@ -65,9 +94,31 @@ public class FunctionCall implements Expression {
 	}
 
 	@Override
+	public Expression getHead() {
+		return functionId;
+	}
+
+	@Override
+	public String toString() {
+		String str = functionId + "[";
+		Iterator<Expression> it = arguments.iterator();
+		while (it.hasNext()) {
+			str += it.next();
+			if (it.hasNext())
+				str += ", ";
+		}
+		return str + "]";
+	}
+
+	@Override
 	public boolean equals(Expression expr) {
-		// TODO Auto-generated method stub
-		return false;
+		if (expr instanceof FunctionCall) {
+			FunctionCall other = (FunctionCall) expr;
+			if (other.getChildCount() != 0 || getChildCount() != 0)
+				throw new RuntimeException("Not done yet");
+			return getHead().equals(other.getHead());
+		}
+		throw new RuntimeException("Not done yet");
 	}
 
 }

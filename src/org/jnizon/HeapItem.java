@@ -2,11 +2,11 @@ package org.jnizon;
 
 public class HeapItem {
 	private String label;
-	private Expression value;
+	private SymbolValues value;
 	private boolean marked = false;
 	
 	public HeapItem(String label) { this(label, null); }
-	public HeapItem(String label, Expression value) {
+	public HeapItem(String label, SymbolValues value) {
 		this.label = label;
 		this.value = value;
 	}
@@ -23,7 +23,7 @@ public class HeapItem {
 		return label;
 	}
 	
-	public Expression getValue() {
+	public SymbolValues getValue() {
 		return value;
 	}
 	

@@ -1,7 +1,6 @@
 package org.jnizon;
 
 import org.antlr.runtime.RecognitionException;
-import java.util.List;
 
 public class JNizon {
 
@@ -12,56 +11,48 @@ public class JNizon {
 	 */
 	public static void main(String[] args) throws RecognitionException {
 		// Builtins :)
-		BasicForm defaultForm = new BasicForm();
-		JavaFunction plus = new JavaFunction("Plus") {
-			@Override
-			public Expression execute(Context ctx, List<Expression> arguments) {
-				if(arguments.get(0) instanceof IntConstant && arguments.get(1) instanceof IntConstant) {
-					int a = ((IntConstant)arguments.get(0)).getValue();
-					int b = ((IntConstant)arguments.get(1)).getValue();
-					return new IntConstant(a+b);
-				}
-				return this;
-			}
-		};
-		JavaFunction times = new JavaFunction("Times") {
-			@Override
-			public Expression execute(Context ctx, List<Expression> arguments) {
-				if(arguments.get(0) instanceof IntConstant && arguments.get(1) instanceof IntConstant) {
-					int a = ((IntConstant)arguments.get(0)).getValue();
-					int b = ((IntConstant)arguments.get(1)).getValue();
-					return new IntConstant(a*b);
-				}
-				return this;
-			}
-		};
-		Function list = new JavaFunction("List") {
-			@Override
-			public Expression execute(Context ctx, List<Expression> arguments) {
-				return new ListExpression(arguments).evaluate(ctx);
-			}
-		};
 		
-		Function sameq = new SameQ();
-		Function not = new Not();
+		
+		
+		
+		/*Function sameq = new SameQ();
+		Function not = new Not();*/
 		// end of builtins
 		
-		Interpreter it = new Interpreter(defaultForm);
+		Interpreter it = new Interpreter(Builtins.basicForm);
 		
-		it.define(plus);
-		it.addMapping(SyntaxParser.PLUS, plus.getFuncId());
+		it.define(Builtins.basicForm, new BasicForm());
+		it.define(Builtins.plus, new Plus());
+		it.define(Builtins.times, new Times());
+		it.define(Builtins.blank);
+		it.define(Builtins.pattern);
+		it.define(Builtins.holdFirst);
+		it.define(Builtins.set, new Set(), Builtins.holdFirst);
+		it.define(Builtins.setDelayed, new Set(), Builtins.holdAll);
+		it.define(Builtins.time, new Time());
 		
-		it.define(times);
-		it.addMapping(SyntaxParser.TIMES, times.getFuncId());
+		it.addMapping(SyntaxParser.PLUS, Builtins.plus);
 		
-		it.define(list);
-		it.addMapping(SyntaxParser.LISTFUNC, list.getFuncId());
+		it.addMapping(SyntaxParser.TIMES, Builtins.times);
 		
-		it.define(sameq);
+		//it.addMapping(SyntaxParser.LISTFUNC, it.define(Builtins.list));
+		
+		/*it.define(sameq);
 		it.addMapping(SyntaxParser.SAMEQ, sameq.getFuncId());
 		
 		it.define(not);
-		it.addMapping(SyntaxParser.NOT, not.getFuncId());
+		it.addMapping(SyntaxParser.NOT, not.getFuncId());*/
+		
+		
+		it.addMapping(SyntaxParser.BLANK, Builtins.blank);
+		
+		it.addMapping(SyntaxParser.PATTERN, Builtins.pattern);
+		
+		it.addMapping(SyntaxParser.SET, Builtins.set);
+		
+		it.addMapping(SyntaxParser.SETDELAYED, Builtins.setDelayed);
+		
+		it.define(Builtins.rule);
 		
 		Shell sh = new Shell(it);
 		sh.start();

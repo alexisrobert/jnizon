@@ -2,10 +2,9 @@ package org.jnizon;
 
 import java.util.List;
 
-public class Not extends JavaFunction {
+public class Not extends AbstractDownCode {
 
 	public Not() {
-		super("Not");
 	}
 
 	@Override
@@ -14,7 +13,7 @@ public class Not extends JavaFunction {
 			BooleanConstant b = (BooleanConstant)arguments.get(0);
 			return new BooleanConstant(!b.getValue());
 		}
-		return this;
+		return null;
 	}
 
 }

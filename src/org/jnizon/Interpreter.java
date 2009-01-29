@@ -16,12 +16,12 @@ import org.antlr.runtime.tree.CommonTreeAdaptor;
 
 public class Interpreter {
 	private CommonTreeAdaptor adaptor;
-	private Function defaultForm;
-	private Map<Integer, Identifier> mappings;
+	private Symbol defaultForm;
+	private Map<Integer, Symbol> mappings;
 	private static Heap heap;
 	private static Context global_context;
 
-	public Interpreter(Function defaultForm) throws RecognitionException {
+	public Interpreter(Symbol defaultForm) {
 		adaptor = new CommonTreeAdaptor() {
 			@Override
 			public Object create(Token token) {
@@ -29,25 +29,38 @@ public class Interpreter {
 			}
 		};
 		this.defaultForm = defaultForm;
-		mappings = new HashMap<Integer, Identifier>();
+		mappings = new HashMap<Integer, Symbol>();
 
 		heap = new Heap();
 		global_context = heap.getContext(0);
+
 		define(defaultForm);
 	}
-
-	public void addMapping(int token, Identifier function) {
-		mappings.put(token, function);
+	
+	public static Heap getHeap() {
+		return heap;
 	}
 
-	public void define(Function func) {
-		global_context.put(func.getFuncId(), func);
+	public void addMapping(int token, Symbol function) {
+		mappings.put(token, function);
+	}
+	
+	public void define(Symbol s) {
+		global_context.put(s, SymbolValues.empty());
+	}
+	
+	public void define(Symbol s, DownCode code, Symbol ... attributes) {
+		define(s);
+		code.setSymbol(s);
+		global_context.get(s).setDownCode(code);
+		for(Symbol attribute : attributes) global_context.get(s).addAttribute(attribute);
 	}
 
 	public Expression evaluate(String code) throws RecognitionException {
 		Expression main = parse(code);
-		return new FunctionCall(defaultForm.getFuncId(), Collections.singletonList(main
+		return new FunctionCall(defaultForm, Collections.singletonList(main
 				.evaluate(global_context))).evaluate(global_context);
+		//return main.evaluate(global_context);
 	}
 
 	public Expression parse(String code) throws RecognitionException {
@@ -61,7 +74,7 @@ public class Interpreter {
 		SyntaxParser.start_return result = parser.start();
 
 		SyntaxTree tree = (SyntaxTree) result.getTree();
-		// printTree(tree, 0);// print raw AST
+		//printTree(tree, 0);// print raw AST
 
 		return convertTree(tree);
 	}
@@ -86,13 +99,9 @@ public class Interpreter {
 				return block;
 			}
 			return new NullExpression();
-		} else if (tree.getType() == SyntaxParser.ASSIGNEMENT) {
-			Identifier lval = id((CommonTree) tree.getChild(0));
-			Expression rVal = convertTree((CommonTree) tree.getChild(1));
-			return new Assignment((Identifier) lval, rVal);
 		} else if (tree.getType() == SyntaxParser.CLEAR) {
-			Identifier lval = id((CommonTree) tree.getChild(0));
-			return new Clear((Identifier) lval);
+			Symbol lval = id((CommonTree) tree.getChild(0));
+			return new Clear(lval);
 		} else if (tree.getType() == SyntaxParser.INT) {
 			return new IntConstant(Integer.parseInt(tree.getText()));
 		} else if (tree.getType() == SyntaxParser.BOOL) {
@@ -100,39 +109,29 @@ public class Interpreter {
 		} else if (tree.getType() == SyntaxParser.ID
 				&& tree.getChildCount() == 0) {
 			return id(tree);
-		} else if (tree.getType() == SyntaxParser.FUNCTIONDEF) {
-			Identifier funcid = id((CommonTree) tree.getChild(0));
-			Expression funcbody = convertTree((CommonTree) tree.getChild(1));
-			Identifier[] arguments = new Identifier[tree.getChildCount() - 2];
-			for (int i = 2; i < tree.getChildCount(); i++) {
-				arguments[i - 2] = id((CommonTree) tree.getChild(i));
-			}
-			return new FunctionDefinition(funcid, arguments, funcbody);
-		} else {
-			Identifier funcid;
-			funcid = mappings.get(tree.getType());
+		} else if(tree.getType() == SyntaxParser.FUNCTIONCALL){
+			Symbol funcid;
+			funcid = mappings.get(tree.getChild(0).getType());
 			if (funcid == null)
-				funcid = id(tree);
+				funcid = id((CommonTree)tree.getChild(0));
 			List<Expression> arguments = new ArrayList<Expression>();
-			for (int i = 0; i < tree.getChildCount(); i++) {
-				arguments.add(convertTree((CommonTree) tree.getChild(i)));
+			for (int i = 0; i < tree.getChildCount()-1; i++) {
+				arguments.add(convertTree((CommonTree) tree.getChild(i+1)));
 			}
 			return new FunctionCall(funcid, arguments);
-		}
+		} else throw new RuntimeException("Failed : " + tree);
 	}
 
-	public static Identifier id(CommonTree tree) {
-		return new Identifier(tree.getText());
+	public static Symbol id(CommonTree tree) {
+		return new Symbol(tree.getText());
 	}
 
 	public static void printTree(CommonTree tree, int indent) {
 		for (int i = 0; i < indent; i++)
 			System.out.print(" - ");
 		if (tree == null) {
-			System.out.println("Null");
 			return;
 		}
-		System.out.println(tree.getText() + " : " + tree.getToken().getType());
 		if (tree.getChildren() != null) {
 			for (Object child : tree.getChildren()) {
 				printTree((CommonTree) child, indent + 1);

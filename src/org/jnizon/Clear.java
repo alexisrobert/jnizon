@@ -2,9 +2,9 @@ package org.jnizon;
 
 // TODO: Migrate this to JavaFunction
 public class Clear implements Expression {
-	private Identifier variable;
+	private Symbol variable;
 	
-	public Clear(Identifier variable) {
+	public Clear(Symbol variable) {
 		this.variable = variable;
 	}
 	
@@ -31,5 +31,11 @@ public class Clear implements Expression {
 	public boolean equals(Expression expr) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public Expression getHead() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

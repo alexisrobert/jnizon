@@ -2,14 +2,13 @@ package org.jnizon;
 
 import java.util.List;
 
-public class SameQ extends JavaFunction {
+public class SameQ extends AbstractDownCode {
 	public SameQ() {
-		super("SameQ");
 	}
 
 	@Override
 	public Expression execute(Context ctx, List<Expression> arguments) {
-		if(arguments.size() <= 1) return this;
+		if(arguments.size() <= 1) return null;
 		
 		for (int i = 1; i < arguments.size(); i++) {
 			Expression a = arguments.get(i-1).evaluate(ctx);

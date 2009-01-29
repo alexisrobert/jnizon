@@ -49,5 +49,10 @@ public class CodeBlock implements Expression {
 		}
 		
 		return true;
-	};
+	}
+	
+	@Override
+	public Expression getHead() {
+		return statements.get(statements.size()-1).getHead();
+	}
 }
