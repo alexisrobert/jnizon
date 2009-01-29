@@ -12,7 +12,7 @@ tokens {
 	CLEAR;
 	FUNCTIONDEF;
 	CODEBLOCK;
-	LISTFUNC;
+	LIST;
 	SAMEQ;
 	NOT;
 	BLANK;
@@ -22,6 +22,7 @@ tokens {
 	GREATER;
 	LESS;
 	MINUSONE;
+	PART;
 }
 
 @header { package org.jnizon; }
@@ -36,10 +37,10 @@ expr: cexpr WS? (ENDINSTRUCT WS? expr)* -> ^(CODEBLOCK cexpr expr*);
 
 cexpr	:	plusExpr WS? ASSIGN WS? cexpr -> ^(FUNCTIONCALL SET plusExpr cexpr)
 	|	plusExpr WS? BIND WS? cexpr -> ^(FUNCTIONCALL SETDELAYED plusExpr cexpr)
-	|	OPENLST csexpr? CLOSELST -> ^(LISTFUNC csexpr?)
 	|	ID WS? UNASSIGN -> ^(CLEAR ID)
 //	|	ID OPENBRK csid? CLOSEBRK WS? BIND WS? plusExpr -> ^(FUNCTIONDEF ID plusExpr csid?)
 	|	atom (EQSAME atom)+ -> ^(SAMEQ atom atom+)
+	|	atom OPENBRK OPENBRK plusExpr CLOSEBRK CLOSEBRK -> ^(FUNCTIONCALL PART atom plusExpr)
 	|	conditional
 	|	plusExpr;
 
@@ -60,6 +61,7 @@ atom	:	INT
 	|	BOOL
 	|	MINUS atom -> ^(FUNCTIONCALL TIMES MINUSONE atom)
 	|	ID
+	|	OPENLST csexpr? CLOSELST -> ^(FUNCTIONCALL LIST csexpr?) 
 	|	UNDERSCORE -> ^(FUNCTIONCALL BLANK)
 	|	ID UNDERSCORE -> ^(FUNCTIONCALL PATTERN ID ^(FUNCTIONCALL BLANK))
 	|	ID OPENBRK csexpr? CLOSEBRK -> ^(FUNCTIONCALL ID csexpr?)

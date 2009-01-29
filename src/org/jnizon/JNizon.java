@@ -37,12 +37,16 @@ public class JNizon {
 		it.define(Builtins.less, new Less());
 		it.define(Builtins.whileLoop, new WhileLoop(), Builtins.holdAll);
 		it.define(Builtins.print, new Print());
+		it.define(Builtins.part, new Part());
+		it.define(Builtins.length, new Length());
 		
 		it.addMapping(SyntaxParser.PLUS, Builtins.plus);
 		
 		it.addMapping(SyntaxParser.TIMES, Builtins.times);
 		
-		//it.addMapping(SyntaxParser.LISTFUNC, it.define(Builtins.list));
+		it.addMapping(SyntaxParser.LIST, Builtins.list);
+		
+		it.addMapping(SyntaxParser.PART, Builtins.part);
 		
 		/*it.define(sameq);
 		it.addMapping(SyntaxParser.SAMEQ, sameq.getFuncId());
