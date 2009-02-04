@@ -17,6 +17,7 @@ public class JNizon {
 		it.define(Builtins.times, new Times(), Builtins.flat);
 		it.define(Builtins.blank);
 		it.define(Builtins.pattern);
+		it.define(Builtins.condition);
 		it.define(Builtins.holdFirst);
 		it.define(Builtins.holdAll);
 		it.define(Builtins.holdRest);

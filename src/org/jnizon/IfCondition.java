@@ -3,7 +3,6 @@ package org.jnizon;
 import java.util.List;
 
 public class IfCondition extends AbstractDownCode {
-
 	@Override
 	public Expression execute(Context ctx, List<Expression> arguments) {
 		Expression condition = arguments.get(0);

@@ -1,5 +1,6 @@
 package org.jnizon.matching;
 
+import org.jnizon.BooleanConstant;
 import org.jnizon.Builtins;
 import org.jnizon.Context;
 import org.jnizon.Expression;
@@ -26,6 +27,17 @@ public class PatternMatcher {
 	}
 
 	private boolean matchTree(Context ctx, Expression pattern, Expression tree) {
+		if(pattern.getHead().equals(Builtins.condition)) {
+			if (pattern.getChildCount() < 2) return false;
+			
+			Expression condition = pattern.getChild(1).evaluate(ctx);
+			if (condition instanceof BooleanConstant &&
+					((BooleanConstant)condition).getValue() == true) {
+				return matchTree(ctx, pattern.getChild(0), tree);
+			} else {
+				return false;
+			}
+		}
 		if(pattern.getHead().equals(Builtins.pattern)) {
 			if(matchTree(ctx, pattern.getChild(1), tree)) {
 				Symbol named = (Symbol)pattern.getChild(0);
