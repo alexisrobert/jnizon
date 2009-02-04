@@ -39,7 +39,7 @@ public class FunctionCall implements Expression {
 				Expression arg = it.next();
 				if(arg instanceof FunctionCall) {
 					FunctionCall call = (FunctionCall)arg;
-					if(call.getFunctionId().equals(functionId)) {
+					if(call.getFunctionId().equals(fid)) {
 						changed = true;
 						it.remove();
 						for(Expression na : call.getArguments())
@@ -47,7 +47,7 @@ public class FunctionCall implements Expression {
 					}
 				}
 			}
-			if(changed) return new FunctionCall(functionId, nArgs);
+			if(changed) return new FunctionCall(fid, nArgs).evaluate(ctx);
 		}
 
 		List<Expression> evaluatedArguments;
@@ -81,19 +81,20 @@ public class FunctionCall implements Expression {
 
 		List<Expression> downValues = sValues.getDownValues();
 		PatternMatcher matcher = new PatternMatcher();
+		FunctionCall evaluated = new FunctionCall(fid, evaluatedArguments);
 		for (Expression rule : downValues) {
 			if (!rule.getHead().equals(Builtins.rule))
 				throw new RuntimeException("No rule in downvalues");
 			Expression pattern = rule.getChild(0);
 			Expression replacement = rule.getChild(1);
-			MatchResult result = matcher.match(ctx, pattern, this);
+			MatchResult result = matcher.match(ctx, pattern, evaluated);
 			if (result.isMatched()) {
-				if (result.getRoot() != this)
+				if (result.getRoot() != evaluated)
 					throw new RuntimeException("WTF ?");
 				return replacement.evaluate(result.getContext());
 			}
 		}
-		return new FunctionCall(fid, evaluatedArguments);
+		return evaluated;
 	}
 
 	@Override

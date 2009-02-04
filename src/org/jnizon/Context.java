@@ -3,6 +3,7 @@ package org.jnizon;
 import java.util.HashMap;
 import java.util.Iterator;
 
+
 public class Context extends HashMap<Integer, HeapItem> {
 	private static final long serialVersionUID = 4161192730488414955L;
 
@@ -81,6 +82,10 @@ public class Context extends HashMap<Integer, HeapItem> {
 	public int getContextId() {
 		return context_id;
 	}
+	
+	public boolean hasParent() {
+		return parent != null;
+	}
 
 	public Context derivate() {
 		int childId = heap.newContext();
@@ -91,13 +96,13 @@ public class Context extends HashMap<Integer, HeapItem> {
 	
 	@Override
 	public String toString() {
-		String str = "Context[";
+		String str = "Context[" + (hasParent() ? "parent:" + parent.getContextId() : "") + ", content";
 		Iterator<HeapItem> it = values().iterator();
 		while(it.hasNext()) {
 			HeapItem item = it.next();
 			
-			str += item.getLabel() + ":" + item.getValue();
-			if(it.hasNext()) str += ", ";
+			str += "\n" + item.getLabel() + ":" + item.getValue();
+			if(it.hasNext()) str += ",";
 		}
 		return str + "]";
 	}

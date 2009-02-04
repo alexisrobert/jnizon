@@ -1,15 +1,26 @@
 package org.jnizon;
 
+import java.io.IOException;
+
 import org.antlr.runtime.RecognitionException;
 
 public class JNizon {
-
-	/**
-	 * @param args
-	 * @throws RecognitionException 
-	 * @throws RecognitionException
-	 */
-	public static void main(String[] args) throws RecognitionException {
+	
+	public static final String[] initFiles = 
+	{
+		"init.m"
+	};
+	
+	public static void main(String[] args) throws RecognitionException, IOException {
+		// Builtins :)
+		
+		
+		
+		
+		/*Function sameq = new SameQ();
+		Function not = new Not();*/
+		// end of builtins
+		
 		Interpreter it = new Interpreter(Builtins.basicForm);
 		
 		it.define(Builtins.basicForm, new BasicForm());
@@ -63,6 +74,10 @@ public class JNizon {
 		// <YOUHOU>
 		it.evaluate("Abs[x_] := If[x > 0, x, -x]");
 		// </YOUHOU>
+		
+		for(String filename : initFiles) {
+			new CodeFile(filename).evaluate(it);
+		}
 		
 		Shell sh = new Shell(it);
 		sh.start();

@@ -25,9 +25,10 @@ public class Symbol implements Expression {
 			if(!rule.getHead().equals(Builtins.rule)) throw new RuntimeException("No rule in ownvalues");
 			Expression pattern = rule.getChild(0);
 			Expression replacement = rule.getChild(1);
+			if(replacement.equals(this)) return this;//TODO quite nasty bug fix, no time to investigate but it is not the proper way (try to remove this and do : f[x_] := x+1 then f[x])
 			MatchResult result = matcher.match(ctx, pattern, this);
 			if(result.isMatched()) {
-				return replacement.evaluate(ctx);//For symbol ownvalues, no need for matcher context ?
+				return replacement.evaluate(result.getContext());
 			}
 		}
 		return this;

@@ -28,7 +28,10 @@ public class Set extends AbstractDownCode {
 			vals.getOwnValues().clear();
 			vals.addOwnValue(new FunctionCall(Builtins.rule, args));
 		}
-		else vals.addDownValue(new FunctionCall(Builtins.rule, args));
+		else {
+			FunctionCall fc = new FunctionCall(Builtins.rule, args);
+			vals.addDownValue(fc);
+		}
 		
 		ctx.put(s, vals);
 		
