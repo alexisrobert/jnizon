@@ -25,7 +25,7 @@ tokens {
 	PART;
 }
 
-@header { package org.jnizon; }
+@header { package org.jnizon.parsing; }
 
 start	:	expr? -> ^(CODEBLOCK expr?);
 

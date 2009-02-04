@@ -25,6 +25,8 @@ import org.jnizon.core.Heap;
 import org.jnizon.core.NullExpression;
 import org.jnizon.core.Symbol;
 import org.jnizon.core.SymbolValues;
+import org.jnizon.parsing.SyntaxLexer;
+import org.jnizon.parsing.SyntaxParser;
 import org.jnizon.parsing.SyntaxTree;
 
 public class Interpreter {

@@ -1,6 +1,6 @@
 lexer grammar SyntaxLexer;
 
-@header { package org.jnizon; }
+@header { package org.jnizon.parsing; }
 
 ENDINSTRUCT
 	:	';';

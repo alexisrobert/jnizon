@@ -19,6 +19,7 @@ import org.jnizon.builtins.Set;
 import org.jnizon.builtins.Time;
 import org.jnizon.builtins.Times;
 import org.jnizon.builtins.WhileLoop;
+import org.jnizon.parsing.SyntaxParser;
 
 public class JNizon {
 
