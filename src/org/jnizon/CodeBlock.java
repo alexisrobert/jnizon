@@ -14,7 +14,8 @@ public class CodeBlock implements Expression {
 	@Override
 	public Expression evaluate(Context ctx) {
 		Expression result = null;
-		if(statements.size() == 0) return new NullExpression();
+		if (statements.size() == 0)
+			return new NullExpression();
 		for (Expression expr : statements) {
 			result = expr.evaluate(ctx);
 		}
@@ -27,7 +28,8 @@ public class CodeBlock implements Expression {
 
 	@Override
 	public Expression getChild(int index) {
-		if(index == 0) return statements.get(statements.size()-1);
+		if (index == 0)
+			return statements.get(statements.size() - 1);
 		throw new RuntimeException("Ouf of bounds");
 	}
 
@@ -37,22 +39,23 @@ public class CodeBlock implements Expression {
 
 	@Override
 	public boolean equals(Expression expr) {
-		if (!(expr instanceof CodeBlock)) return false;
-		
-		List<Expression> exprs = ((CodeBlock)expr).getStatements();
+		if (!(expr instanceof CodeBlock))
+			return false;
+
+		List<Expression> exprs = ((CodeBlock) expr).getStatements();
 		if (exprs.size() != statements.size())
 			return false;
-		
+
 		for (int i = 0; i < statements.size(); i++) {
 			if (!statements.get(i).equals(exprs.get(i)))
 				return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public Expression getHead() {
-		return statements.get(statements.size()-1).getHead();
+		return statements.get(statements.size() - 1).getHead();
 	}
 }

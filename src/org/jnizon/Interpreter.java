@@ -36,7 +36,7 @@ public class Interpreter {
 
 		define(defaultForm);
 	}
-	
+
 	public static Heap getHeap() {
 		return heap;
 	}
@@ -44,23 +44,24 @@ public class Interpreter {
 	public void addMapping(int token, Symbol function) {
 		mappings.put(token, function);
 	}
-	
+
 	public void define(Symbol s) {
 		global_context.put(s, SymbolValues.empty());
 	}
-	
-	public void define(Symbol s, DownCode code, Symbol ... attributes) {
+
+	public void define(Symbol s, DownCode code, Symbol... attributes) {
 		define(s);
 		code.setSymbol(s);
 		global_context.get(s).setDownCode(code);
-		for(Symbol attribute : attributes) global_context.get(s).addAttribute(attribute);
+		for (Symbol attribute : attributes)
+			global_context.get(s).addAttribute(attribute);
 	}
 
 	public Expression evaluate(String code) throws RecognitionException {
 		Expression main = parse(code);
 		return new FunctionCall(defaultForm, Collections.singletonList(main
 				.evaluate(global_context))).evaluate(global_context);
-		//return main.evaluate(global_context);
+		// return main.evaluate(global_context);
 	}
 
 	public Expression parse(String code) throws RecognitionException {
@@ -74,27 +75,27 @@ public class Interpreter {
 		SyntaxParser.start_return result = parser.start();
 
 		SyntaxTree tree = (SyntaxTree) result.getTree();
-		//printTree(tree, 0);// print raw AST
-		
+		// printTree(tree, 0);// print raw AST
+
 		return convertTree(tree);
 	}
 
 	public Expression convertTree(CommonTree tree) {
 		if (tree == null)
 			return new NullExpression();
-		if(tree.getType() == SyntaxParser.MINUSONE) {
+		if (tree.getType() == SyntaxParser.MINUSONE) {
 			return new IntConstant(-1);
 		}
 		if (tree.getType() == SyntaxParser.CODEBLOCK) {
 			if (tree.getChildren() != null) {
 				if (tree.getChildCount() == 1)
 					return convertTree((CommonTree) tree.getChild(0));// Simplify
-																		// a bit
-																		// the
-																		// tree,
-																		// no 1
-																		// element
-																		// codeblock
+				// a bit
+				// the
+				// tree,
+				// no 1
+				// element
+				// codeblock
 				CodeBlock block = new CodeBlock();
 				for (Object child : tree.getChildren()) {
 					block.getStatements().add(convertTree((CommonTree) child));
@@ -106,9 +107,9 @@ public class Interpreter {
 			Symbol lval = id((CommonTree) tree.getChild(0));
 			List<Expression> values = new ArrayList<Expression>();
 			values.add(lval);
-			
+
 			new Clear().execute(global_context, values);
-			
+
 			return lval;
 		} else if (tree.getType() == SyntaxParser.INT) {
 			return new IntConstant(Integer.parseInt(tree.getText()));
@@ -117,17 +118,18 @@ public class Interpreter {
 		} else if (tree.getType() == SyntaxParser.ID
 				&& tree.getChildCount() == 0) {
 			return id(tree);
-		} else if(tree.getType() == SyntaxParser.FUNCTIONCALL){
+		} else if (tree.getType() == SyntaxParser.FUNCTIONCALL) {
 			Symbol funcid;
 			funcid = mappings.get(tree.getChild(0).getType());
 			if (funcid == null)
-				funcid = id((CommonTree)tree.getChild(0));
+				funcid = id((CommonTree) tree.getChild(0));
 			List<Expression> arguments = new ArrayList<Expression>();
-			for (int i = 0; i < tree.getChildCount()-1; i++) {
-				arguments.add(convertTree((CommonTree) tree.getChild(i+1)));
+			for (int i = 0; i < tree.getChildCount() - 1; i++) {
+				arguments.add(convertTree((CommonTree) tree.getChild(i + 1)));
 			}
 			return new FunctionCall(funcid, arguments);
-		} else throw new RuntimeException("Failed : " + tree);
+		} else
+			throw new RuntimeException("Failed : " + tree);
 	}
 
 	public static Symbol id(CommonTree tree) {

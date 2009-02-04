@@ -2,9 +2,9 @@ package org.jnizon;
 
 import java.io.IOException;
 
-import org.antlr.runtime.RecognitionException;
-
 import jline.ConsoleReader;
+
+import org.antlr.runtime.RecognitionException;
 
 public class Shell {
 	private Interpreter interpreter;
@@ -13,11 +13,10 @@ public class Shell {
 		this.interpreter = interpreter;
 	}
 
-
-
 	public void start() {
 		System.out.println("Welcome to jizon for Java");
-		System.out.println("Copyright (c) 2009 Blumberg & Robert Research Labs Inc.");
+		System.out
+				.println("Copyright (c) 2009 Blumberg & Robert Research Labs Inc.");
 		System.out.println("");
 
 		ConsoleReader reader;
@@ -33,10 +32,10 @@ public class Shell {
 				System.out.print(String.format("Out[%d]= ", iteration));
 
 				try {
-					//System.out.println(interpreter.evaluate(line));
+					// System.out.println(interpreter.evaluate(line));
 					interpreter.evaluate(line);
-					//Expression tree = interpreter.parse(line);
-					
+					// Expression tree = interpreter.parse(line);
+
 				} catch (RecognitionException e) {
 					e.printStackTrace();
 				}

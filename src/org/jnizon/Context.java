@@ -3,7 +3,6 @@ package org.jnizon;
 import java.util.HashMap;
 import java.util.Iterator;
 
-
 public class Context extends HashMap<Integer, HeapItem> {
 	private static final long serialVersionUID = 4161192730488414955L;
 
@@ -15,7 +14,7 @@ public class Context extends HashMap<Integer, HeapItem> {
 		this.context_id = id;
 		this.heap = heap;
 	}
-	
+
 	public Heap getHeap() {
 		return heap;
 	}
@@ -35,12 +34,12 @@ public class Context extends HashMap<Integer, HeapItem> {
 	public SymbolValues get(Symbol id) {
 		HeapItem item = get(id.getName());
 		if (item == null) {
-			if(parent == null) {
+			if (parent == null) {
 				return SymbolValues.empty();
 			}
 			return parent.get(id);
 		}
-		
+
 		return item.getValue();
 	}
 
@@ -59,30 +58,30 @@ public class Context extends HashMap<Integer, HeapItem> {
 	public void put(HeapItem value) {
 		put(value.getLabel(), value); // TODO: Change hashCode to MD4
 	}
-	
+
 	public void put(Symbol id, SymbolValues expr) {
 		HeapItem prev = get(id.getName());
-		if(prev == null && parent != null) {
+		if (prev == null && parent != null) {
 			parent.put(id, expr);
 		} else {
 			HeapItem item = new HeapItem(id.getName(), expr);
 			put(item);
 		}
 	}
-	
+
 	public void putLocal(Symbol id, SymbolValues expr) {
 		HeapItem item = new HeapItem(id.getName(), expr);
 		put(item);
 	}
-	
+
 	public void remove(Symbol id) {
 		remove(Integer.valueOf(id.getName().hashCode()));
 	}
-	
+
 	public int getContextId() {
 		return context_id;
 	}
-	
+
 	public boolean hasParent() {
 		return parent != null;
 	}
@@ -93,16 +92,19 @@ public class Context extends HashMap<Integer, HeapItem> {
 		child.setParent(this);
 		return child;
 	}
-	
+
 	@Override
 	public String toString() {
-		String str = "Context[" + (hasParent() ? "parent:" + parent.getContextId() : "") + ", content";
+		String str = "Context["
+				+ (hasParent() ? "parent:" + parent.getContextId() : "")
+				+ ", content";
 		Iterator<HeapItem> it = values().iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			HeapItem item = it.next();
-			
+
 			str += "\n" + item.getLabel() + ":" + item.getValue();
-			if(it.hasNext()) str += ",";
+			if (it.hasNext())
+				str += ",";
 		}
 		return str + "]";
 	}

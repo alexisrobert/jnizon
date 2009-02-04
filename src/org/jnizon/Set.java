@@ -11,31 +11,32 @@ public class Set extends AbstractDownCode {
 		Expression expr = arguments.get(1);
 		SymbolValues vals;
 		Symbol s;
-		if(lvalue instanceof Symbol) {
-			s = (Symbol)lvalue;
+		if (lvalue instanceof Symbol) {
+			s = (Symbol) lvalue;
 			vals = ctx.get(s);
 		} else if (lvalue instanceof FunctionCall) {
-			s = (Symbol)((FunctionCall)lvalue).getFunctionId();
-			vals = ctx.get(s);	
+			s = (Symbol) ((FunctionCall) lvalue).getFunctionId();
+			vals = ctx.get(s);
 		} else {
-			 throw new RuntimeException("Cannot assign, " + lvalue + " is not a symbol");
+			throw new RuntimeException("Cannot assign, " + lvalue
+					+ " is not a symbol");
 		}
-		
+
 		List<Expression> args = new ArrayList<Expression>();
 		args.add(lvalue);
 		args.add(expr);
-		if(lvalue instanceof Symbol) {
+		if (lvalue instanceof Symbol) {
 			vals.getOwnValues().clear();
 			vals.addOwnValue(new FunctionCall(Builtins.rule, args));
-		}
-		else {
+		} else {
 			FunctionCall fc = new FunctionCall(Builtins.rule, args);
 			vals.addDownValue(fc);
 		}
-		
+
 		ctx.put(s, vals);
-		
-		if(ctx.get(getSymbol()).getAttributes().contains(Builtins.holdAll)) return new NullExpression();
+
+		if (ctx.get(getSymbol()).getAttributes().contains(Builtins.holdAll))
+			return new NullExpression();
 		return expr;
 	}
 

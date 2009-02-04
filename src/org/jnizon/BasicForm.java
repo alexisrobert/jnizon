@@ -65,7 +65,8 @@ public class BasicForm extends AbstractDownCode {
 		} else if (expr instanceof IntConstant) {
 			IntConstant i = (IntConstant) expr;
 			boolean parnt = i.getValue() < 0;
-			System.out.print((parnt ? "(" : "") + i.toString() + (parnt ? ")" : ""));
+			System.out.print((parnt ? "(" : "") + i.toString()
+					+ (parnt ? ")" : ""));
 		} else if (expr instanceof Symbol) {
 			Symbol id = (Symbol) expr;
 			System.out.print(id.evaluate(ctx));

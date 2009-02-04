@@ -38,7 +38,7 @@ public class Builtins {
 	public static final Symbol length = new Symbol("Length");
 
 	public static final Symbol flat = new Symbol("Flat");
-	
+
 	public static final Symbol sameq = new Symbol("SameQ");
 	public static final Symbol not = new Symbol("Not");
 	public static final Symbol clear = new Symbol("Clear");

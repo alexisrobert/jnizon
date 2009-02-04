@@ -23,7 +23,7 @@ public class NullExpression implements Expression {
 	public boolean equals(Expression expr) {
 		return expr instanceof NullExpression;
 	}
-	
+
 	@Override
 	public Expression getHead() {
 		// TODO Auto-generated method stub

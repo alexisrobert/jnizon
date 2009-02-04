@@ -30,24 +30,25 @@ public class FunctionCall implements Expression {
 			sValues = ctx.get((Symbol) fid);
 			attributes = sValues.getAttributes();
 		}
-		
-		if(attributes.contains(Builtins.flat)) {
+
+		if (attributes.contains(Builtins.flat)) {
 			List<Expression> nArgs = new ArrayList<Expression>(arguments);
 			ListIterator<Expression> it = nArgs.listIterator();
 			boolean changed = false;
-			while(it.hasNext()) {
+			while (it.hasNext()) {
 				Expression arg = it.next();
-				if(arg instanceof FunctionCall) {
-					FunctionCall call = (FunctionCall)arg;
-					if(call.getFunctionId().equals(fid)) {
+				if (arg instanceof FunctionCall) {
+					FunctionCall call = (FunctionCall) arg;
+					if (call.getFunctionId().equals(fid)) {
 						changed = true;
 						it.remove();
-						for(Expression na : call.getArguments())
+						for (Expression na : call.getArguments())
 							it.add(na);
 					}
 				}
 			}
-			if(changed) return new FunctionCall(fid, nArgs).evaluate(ctx);
+			if (changed)
+				return new FunctionCall(fid, nArgs).evaluate(ctx);
 		}
 
 		List<Expression> evaluatedArguments;
@@ -55,7 +56,8 @@ public class FunctionCall implements Expression {
 			evaluatedArguments = new ArrayList<Expression>();
 			if (attributes.contains(Builtins.holdRest)) {
 				evaluatedArguments.add(arguments.get(0).evaluate(ctx));
-				evaluatedArguments.addAll(arguments.subList(1, arguments.size())); 
+				evaluatedArguments.addAll(arguments
+						.subList(1, arguments.size()));
 			} else {
 				int start = 0;
 				if (attributes.contains(Builtins.holdFirst)) {

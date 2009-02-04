@@ -5,24 +5,19 @@ import java.io.IOException;
 import org.antlr.runtime.RecognitionException;
 
 public class JNizon {
-	
-	public static final String[] initFiles = 
-	{
-		"init.m"
-	};
-	
-	public static void main(String[] args) throws RecognitionException, IOException {
+
+	public static final String[] initFiles = { "init.m" };
+
+	public static void main(String[] args) throws RecognitionException,
+			IOException {
 		// Builtins :)
-		
-		
-		
-		
-		/*Function sameq = new SameQ();
-		Function not = new Not();*/
+
+		/*
+		 * Function sameq = new SameQ(); Function not = new Not();
+		 */
 		// end of builtins
-		
 		Interpreter it = new Interpreter(Builtins.basicForm);
-		
+
 		it.define(Builtins.basicForm, new BasicForm());
 		it.define(Builtins.plus, new Plus(), Builtins.flat);
 		it.define(Builtins.times, new Times(), Builtins.flat);
@@ -45,40 +40,40 @@ public class JNizon {
 		it.define(Builtins.not, new Not());
 		it.define(Builtins.length, new Length());
 		it.define(Builtins.clear, new Clear(), Builtins.holdAll);
-		
+
 		it.addMapping(SyntaxParser.PLUS, Builtins.plus);
-		
+
 		it.addMapping(SyntaxParser.TIMES, Builtins.times);
-		
+
 		it.addMapping(SyntaxParser.LIST, Builtins.list);
-		
+
 		it.addMapping(SyntaxParser.PART, Builtins.part);
-		
+
 		it.addMapping(SyntaxParser.SAMEQ, Builtins.sameq);
-		
+
 		it.addMapping(SyntaxParser.NOT, Builtins.not);
-		
+
 		it.addMapping(SyntaxParser.GREATER, Builtins.greater);
 		it.addMapping(SyntaxParser.LESS, Builtins.less);
-		
+
 		it.addMapping(SyntaxParser.BLANK, Builtins.blank);
-		
+
 		it.addMapping(SyntaxParser.PATTERN, Builtins.pattern);
-		
+
 		it.addMapping(SyntaxParser.SET, Builtins.set);
-		
+
 		it.addMapping(SyntaxParser.SETDELAYED, Builtins.setDelayed);
-		
+
 		it.define(Builtins.rule);
-		
+
 		// <YOUHOU>
 		it.evaluate("Abs[x_] := If[x > 0, x, -x]");
 		// </YOUHOU>
-		
-		for(String filename : initFiles) {
+
+		for (String filename : initFiles) {
 			new CodeFile(filename).evaluate(it);
 		}
-		
+
 		Shell sh = new Shell(it);
 		sh.start();
 	}
