@@ -3,6 +3,22 @@ package org.jnizon;
 import java.io.IOException;
 
 import org.antlr.runtime.RecognitionException;
+import org.jnizon.builtins.BasicForm;
+import org.jnizon.builtins.Builtins;
+import org.jnizon.builtins.Clear;
+import org.jnizon.builtins.Greater;
+import org.jnizon.builtins.IfCondition;
+import org.jnizon.builtins.Length;
+import org.jnizon.builtins.Less;
+import org.jnizon.builtins.Not;
+import org.jnizon.builtins.Part;
+import org.jnizon.builtins.Plus;
+import org.jnizon.builtins.Print;
+import org.jnizon.builtins.SameQ;
+import org.jnizon.builtins.Set;
+import org.jnizon.builtins.Time;
+import org.jnizon.builtins.Times;
+import org.jnizon.builtins.WhileLoop;
 
 public class JNizon {
 

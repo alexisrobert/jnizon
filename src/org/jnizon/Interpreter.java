@@ -13,6 +13,19 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.jnizon.builtins.BooleanConstant;
+import org.jnizon.builtins.Clear;
+import org.jnizon.builtins.CodeBlock;
+import org.jnizon.builtins.FunctionCall;
+import org.jnizon.builtins.IntConstant;
+import org.jnizon.core.Context;
+import org.jnizon.core.DownCode;
+import org.jnizon.core.Expression;
+import org.jnizon.core.Heap;
+import org.jnizon.core.NullExpression;
+import org.jnizon.core.Symbol;
+import org.jnizon.core.SymbolValues;
+import org.jnizon.parsing.SyntaxTree;
 
 public class Interpreter {
 	private CommonTreeAdaptor adaptor;

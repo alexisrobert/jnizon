@@ -3,8 +3,8 @@
  */
 package org.jnizon.matching;
 
-import org.jnizon.Context;
-import org.jnizon.Expression;
+import org.jnizon.core.Context;
+import org.jnizon.core.Expression;
 
 public class MatchResult {
 	private boolean matched;

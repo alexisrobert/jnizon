@@ -1,11 +1,11 @@
 package org.jnizon.matching;
 
-import org.jnizon.BooleanConstant;
-import org.jnizon.Builtins;
-import org.jnizon.Context;
-import org.jnizon.Expression;
-import org.jnizon.Symbol;
-import org.jnizon.SymbolValues;
+import org.jnizon.builtins.BooleanConstant;
+import org.jnizon.builtins.Builtins;
+import org.jnizon.core.Context;
+import org.jnizon.core.Expression;
+import org.jnizon.core.Symbol;
+import org.jnizon.core.SymbolValues;
 
 public class PatternMatcher {
 
