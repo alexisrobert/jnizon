@@ -6,6 +6,7 @@ import org.antlr.runtime.RecognitionException;
 import org.jnizon.builtins.BasicForm;
 import org.jnizon.builtins.Builtins;
 import org.jnizon.builtins.Clear;
+import org.jnizon.builtins.FreeQ;
 import org.jnizon.builtins.Greater;
 import org.jnizon.builtins.IfCondition;
 import org.jnizon.builtins.Length;
@@ -44,6 +45,7 @@ public class JNizon {
 		it.define(Builtins.holdFirst);
 		it.define(Builtins.holdAll);
 		it.define(Builtins.holdRest);
+		it.define(Builtins.freeq, new FreeQ());
 		it.define(Builtins.set, new Set(), Builtins.holdFirst);
 		it.define(Builtins.setDelayed, new Set(), Builtins.holdAll);
 		it.define(Builtins.time, new Time());

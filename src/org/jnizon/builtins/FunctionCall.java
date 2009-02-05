@@ -10,8 +10,7 @@ import org.jnizon.core.Context;
 import org.jnizon.core.Expression;
 import org.jnizon.core.Symbol;
 import org.jnizon.core.SymbolValues;
-import org.jnizon.matching.MatchResult;
-import org.jnizon.matching.PatternMatcher;
+import org.jnizon.matching.RuleEvaluator;
 
 public class FunctionCall implements Expression {
 
@@ -86,18 +85,12 @@ public class FunctionCall implements Expression {
 		}
 
 		List<Expression> downValues = sValues.getDownValues();
-		PatternMatcher matcher = new PatternMatcher();
+		RuleEvaluator ruleEvaluator = new RuleEvaluator();
 		FunctionCall evaluated = new FunctionCall(fid, evaluatedArguments);
 		for (Expression rule : downValues) {
-			if (!rule.getHead().equals(Builtins.rule))
-				throw new RuntimeException("No rule in downvalues");
-			Expression pattern = rule.getChild(0);
-			Expression replacement = rule.getChild(1);
-			MatchResult result = matcher.match(ctx, pattern, evaluated);
-			if (result.isMatched()) {
-				if (result.getRoot() != evaluated)
-					throw new RuntimeException("WTF ?");
-				return replacement.evaluate(result.getContext());
+			Expression result = ruleEvaluator.evaluate(ctx, evaluated, rule);
+			if (result != evaluated) {
+				return result;
 			}
 		}
 		return evaluated;
@@ -146,7 +139,7 @@ public class FunctionCall implements Expression {
 				throw new RuntimeException("Not done yet");
 			return getHead().equals(other.getHead());
 		}
-		throw new RuntimeException("Not done yet");
+		return false;//TODO sounds unsure
 	}
 
 }

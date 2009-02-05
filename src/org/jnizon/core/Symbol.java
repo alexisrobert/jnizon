@@ -2,9 +2,7 @@ package org.jnizon.core;
 
 import java.util.List;
 
-import org.jnizon.builtins.Builtins;
-import org.jnizon.matching.MatchResult;
-import org.jnizon.matching.PatternMatcher;
+import org.jnizon.matching.RuleEvaluator;
 
 public class Symbol implements Expression {
 
@@ -21,20 +19,14 @@ public class Symbol implements Expression {
 	@Override
 	public Expression evaluate(Context ctx) {
 		List<Expression> values = ctx.get(this).getOwnValues();
-		PatternMatcher matcher = new PatternMatcher();
+		RuleEvaluator ruleEvaluator = new RuleEvaluator();
 		for (Expression rule : values) {
-			if (!rule.getHead().equals(Builtins.rule))
-				throw new RuntimeException("No rule in ownvalues");
-			Expression pattern = rule.getChild(0);
-			Expression replacement = rule.getChild(1);
-			if (replacement.equals(this))
+			Expression result = ruleEvaluator.evaluate(ctx, this, rule);
+			if (result.equals(this))
 				return this;// TODO quite nasty bug fix, no time to investigate
 							// but it is not the proper way (try to remove this
 							// and do : f[x_] := x+1 then f[x])
-			MatchResult result = matcher.match(ctx, pattern, this);
-			if (result.isMatched()) {
-				return replacement.evaluate(result.getContext());
-			}
+			if(result != this) return result;
 		}
 		return this;
 	}

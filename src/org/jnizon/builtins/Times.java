@@ -20,7 +20,7 @@ public class Times extends AbstractDownCode {
 				it.remove();
 			}
 		}
-		if (arguments.size() == 0)
+		if (arguments.size() == 0 || res == 0)
 			return new IntConstant(res);
 		if (res != 1)
 			arguments.add(new IntConstant(res));
